@@ -1,0 +1,111 @@
+{extend name='admin@main'}
+{block name="button"}
+{if auth("remove")}
+<button data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" data-confirm="确定要删除这些记录吗？" class='layui-btn layui-btn-sm layui-btn-primary'>删除记录</button>
+{/if}
+{/block}
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='funding/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'></label>
+            </th>
+            <th class='text-left'>用户名</th>
+            <th class='text-left'>所属</th>
+            <th class='text-left'>交易金额</th>
+            <th class="text-left">交易前余额</th>
+            <th class="text-left">详情</th>
+            <th class="text-left">流水时间</th>
+            <th class="text-left"></th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='list-table-check-td think-checkbox'>
+                <label><input class="list-check-box" value='{$vo.id}' type='checkbox'></label>
+            </td>
+            <td class='text-left'>
+                {$vo.username}
+            </td>
+            <td>
+                所属业务员：{$vo.s_name|default='--'} <br>
+                我的上级：{$vo.top|default='--'} <br>
+            </td>
+            <td class='text-left'>
+                {if $vo.type == 1}
+                交易金额：<span class="color-green">+${$vo.money|number_format=2}</span>
+                {else}
+                交易金额：<span class="color-red">-${$vo.money|number_format=2}</span>
+                {/if}
+            </td>
+            <td class='text-left'>
+                ${$vo.before|number_format=2}
+            </td>
+            <td class='text-left'>
+                {if $vo.fund_type==1}
+                    系统操作
+                {elseif $vo.fund_type==2}
+                    充值
+                {elseif $vo.fund_type==3}
+                    提现
+                {elseif $vo.fund_type==4}
+                    提现失败
+                {elseif $vo.fund_type==5}
+                    投资项目
+                {elseif $vo.fund_type==6}
+                    投资收益
+                {elseif $vo.fund_type==7}
+                    注册赠送
+                {elseif $vo.fund_type==8}
+                    邀请好友
+                {elseif $vo.fund_type==9}
+                    认证赠送
+                {elseif $vo.fund_type==10}
+                    登录赠送
+                {elseif $vo.fund_type==11}
+                    投资赠送
+                {elseif $vo.fund_type==12}
+                    直属充值奖励
+                {elseif $vo.fund_type==13}
+                    间属充值奖励
+                {elseif $vo.fund_type==14}
+                    幸运抽奖
+                {elseif $vo.fund_type==15}
+                    投资本金返还
+                {elseif $vo.fund_type==16}
+                    储蓄金-申购
+                {elseif $vo.fund_type==17}
+                    储蓄金-赎回
+                {elseif $vo.fund_type==18}
+                    储蓄金-收益
+                {elseif $vo.fund_type==19}
+                    团队佣金    
+                {elseif $vo.fund_type==20}
+                    兑换红包
+                {/if}
+            </td>
+            <td class='text-left'>
+                系统时间：{$vo.time|default='--'}
+                <br>实际时间：{$vo.act_time|default='--'}
+                <br>实际时区：{$vo.time_zone|default='--'}
+            </td>
+            <td class='text-left'>
+                {if auth("remove")}
+                    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除数据吗?" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>
+                {else}
+                    <a data-tips-text="您没有删除的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">删 除</a>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

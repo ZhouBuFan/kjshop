@@ -1,0 +1,35 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body">
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">商户号</label>
+            <label class="layui-col-xs10">
+                <input name="mer_num" required value='{$vo.mer_num|default=""}' placeholder="请输入商户号" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">APP秘钥</label>
+            <label class="layui-col-xs10">
+                <input name="api_key" required value='{$vo.api_key|default=""}' placeholder="请输入APP秘钥" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">请求网关地址</label>
+            <label class="layui-col-xs10">
+                <input name="gate_add" required value='{$vo.gate_add|default=""}' placeholder="请输入请求网关地址" class="layui-input">
+            </label>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

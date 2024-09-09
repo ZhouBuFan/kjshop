@@ -1,0 +1,72 @@
+{extend name='admin@main'}
+{block name="button"}
+{if auth("admin/savings_subscribe/remove")}
+<button data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" class='layui-btn layui-btn-sm layui-btn-primary'>删除</button>
+{/if}
+{/block}
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='savings_subscribe/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <input data-auto-none data-check-target='.list-check-box' type='checkbox'>
+            </th>
+            <th class='text-left nowrap'>申购信息</th>
+            <th class='text-left nowrap'>申购数据</th>
+            <th class='text-left nowrap'>申购状态</th>
+            <th class="text-left nowrap">投资时间</th>
+            <th class="text-left">操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='list-table-check-td think-checkbox'>
+                <input class="list-check-box" value='{$vo.id}' type='checkbox'>
+            </td>
+            <td class='text-left' style="max-width: 260px;overflow: hidden">
+                申购人：{$vo.username|default='--'}<br>
+                申购类型：
+                {if $vo.type==1}
+                    活期
+                {else}
+                    定期
+                {/if}
+                <br>
+            </td>
+            <td class='text-left nowrap'>
+                申购金额：${$vo.money|number_format=2}<br>
+                申购利率：{$vo.rate|default='--'} %<br>
+                {if $vo.type==2}
+                申购天数：{$vo.day|default='--'}<br>
+                {/if}
+            </td>
+            <td class='text-left nowrap'>
+                申购状态：
+                {eq name='vo.status' value='0'}<span class="color-green">进行中</span>{/eq}
+                {eq name='vo.status' value='1'}<span class="color-desc">已结束</span>{/eq}
+                {eq name='vo.status' value='-1'}<span class="color-desc">活期</span>{/eq}
+            </td>
+            <td class='text-left nowrap'>
+                申购时间：{$vo.time|default='--'}<br>
+                实际时间：{$vo.time_actual|default='--'}<br>
+                时区：{$vo.time_zone|default='--'}
+            </td>
+            <td class='text-left'>
+                {if auth("remove")}
+                <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除数据吗?" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删除</a>
+                {else}
+                    <a data-tips-text="您没有删除的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">删除</a>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

@@ -1,0 +1,135 @@
+{extend name='admin@main'}
+{block name="button"}
+{if auth("remove")}
+<button data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" data-confirm="确定要删除这些记录吗？" class='layui-btn layui-btn-sm layui-btn-primary'>删除记录</button>
+{/if}
+{if auth("agree")}
+<button data-action='{:url("agree")}' data-rule="id#{key}" data-csrf="{:systoken('agree')}" data-confirm="确定要同意这些记录吗？" class='layui-btn layui-btn-sm layui-btn-primary'>批量同意</button>
+{/if}
+{/block}
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='recharge_record/index_search'}
+    <p>
+        <h2>充值成功率：{$success_rate|default='--'}</h2>
+    </p>
+    <p>
+        <h2>今日充值金额：{$today_recharge|default='--'}</h2>
+    </p>
+    <p>
+        <h2>今日成功充值笔数：{$today_recharge_num|default='--'}</h2>
+    </p>
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'></label>
+            </th>
+            <th class='text-left'>用户</th>
+            <th class="text-left">充值方式</th>
+            <th class="text-left">充值金额</th>
+            <th class="text-left">交易号</th>
+            <th class="text-left">所属</th>
+            <th class="text-left">充值凭证</th>
+            <th class="text-left">提交时间</th>
+            <th class="text-left">处理进度</th>
+            <th class="text-left">操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='list-table-check-td think-checkbox'>
+                <label><input class="list-check-box" value='{$vo.id}' type='checkbox'></label>
+            </td>
+            <td class='text-left'>
+                {$vo.username|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.rname|default='--'}
+            </td>
+            <td class='text-left'>
+                充值金额：{$vo.money|number_format=2}
+                <!-- <br>实际金额：
+                {if $vo.rtype == 1 || $vo.rtype == 5 ||$vo.rtype == 6}
+                    {$vo.money|number_format=2}&nbsp;USDT
+                {else}
+                    {$vo.money2|number_format=2}&nbsp;{$vo.currency|default='--'}
+                {/if} -->
+            </td> 
+            <td>
+                订单号：{$vo.orderNo|default='--'}
+                <br> 流水号：{$vo.voucher|default='--'}
+            </td>
+            <td>
+                所属业务员：{$vo.s_name|default='--'} <br>
+                我的上级：{$vo.top|default='--'} <br>
+                是否首充：{if $vo.first_charge == '是'}<span style="color: red;">{$vo.first_charge|default='--'}</span> {else} <span style="color: green;">{$vo.first_charge|default='--'}</span> {/if}<br>
+            </td>
+            <td class='text-left' style="max-width: 150px;overflow: hidden;word-wrap: break-word">
+
+                {if $vo.rtype == 5}
+                    {$vo.hash|default='--'}
+                {elseif $vo.rtype == 6}
+                    优盾免提交充值
+                {else}
+                    {notempty name='vo.voucher'}
+                        <img data-tips-image style="width:60px;height:60px" src="{$vo.voucher|default=''}" class="margin-right-5 text-top">
+                    {/notempty}
+                {/if}
+                
+            </td>
+            <td class='text-left'>
+                系统时间：{$vo.time|default='--'}
+                <br>实际时间：{$vo.act_time|default='--'}
+                <br>实际时区：{$vo.time_zone|default='--'}
+            </td>
+            <td class='text-left'>
+                {if $vo.status == 0}
+                    {if $vo.rtype == 3 || $vo.rtype == 10 || $vo.rtype == 11 || $vo.rtype == 12 || $vo.rtype == 13 || $vo.rtype == 15}
+                        自动处理中
+                    {else}
+                        <span class="color-red">审核中</span>
+                    {/if}
+                {/if}
+                {if $vo.status == 1}
+                <span class="color-green">已完成</span>
+                {/if}
+                {if $vo.status == 2}
+                <span class="color-desc">充值失败</span>
+                {/if}
+            </td>
+            <td class='text-left'>
+                {if $vo.status eq 0}
+                    {if $vo.rtype == 3 || $vo.rtype == 10 || $vo.rtype == 12 ||$vo.rtype == 13 || $vo.rtype == 14}
+                        处理中
+                    {else}
+                        {if auth("agree")}
+                        <a class="layui-btn layui-btn layui-btn-xs" data-confirm="确定要同意充值吗？" data-action="{:url('agree')}" data-value="id#{$vo.id}" data-csrf="{:systoken('agree')}">同意</a>
+                        {else}
+                            <a data-tips-text="您没有同意的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">同意</a>
+                        {/if}
+                    {/if}
+                {else}
+                    {if auth("remove")}
+                    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除数据吗?" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删除</a>
+                    {else}
+                        <a data-tips-text="您没有删除的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">删除</a>
+                    {/if}
+                {/if}
+                {if auth("refuse")}
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" data-confirm="确定要拒绝充值吗？" data-action="{:url('refuse')}" data-value="id#{$vo.id}" data-csrf="{:systoken('refuse')}">拒绝</a>
+                {else}
+                    <a data-tips-text="您没有拒绝的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">拒绝</a>
+                {/if}
+            </td>
+
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

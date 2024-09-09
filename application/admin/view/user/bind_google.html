@@ -1,0 +1,30 @@
+<form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+        <div class="layui-form-item">
+            <label class="relative block">
+                <span class="color-green font-w7">谷歌验证器秘钥</span>
+                <input readonly  value='{$google_key|default=""}' placeholder="" class="layui-input">
+            </label>
+            <p class="color-desc">请妥善保管</p>
+        </div>
+        <div class="layui-form-item">
+            <label class="relative block">
+                <span class="color-green font-w7">扫描二维码绑定</span><br>
+                <img src='{$google_qrcode|default=""}'>
+            </label>
+        </div>
+        <div class="layui-form-item">
+            <label class="relative block">
+                <span class="color-green font-w7">验证码</span>
+                <input placeholder="请输入验证码" required class="layui-input" name="code">
+            </label>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+</form>

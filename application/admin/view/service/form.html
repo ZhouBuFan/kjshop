@@ -1,0 +1,130 @@
+{extend name='admin@main'}
+
+{block name="content"}
+
+<form onsubmit="return false;" id="GoodsForm" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body think-box-shadow padding-left-40">
+
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（简体）</span>
+                <input name="title_zh_cn"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_zh_cn|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（繁体）</span>
+                <input name="title_zh_hk"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_zh_hk|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（英文）</span>
+                <input name="title_en_us"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_en_us|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（泰语）</span>
+                <input name="title_th_th"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_th_th|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（越南）</span>
+                <input name="title_vi_vn"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_vi_vn|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（日语）</span>
+                <input name="title_ja_jp"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_ja_jp|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（韩语）</span>
+                <input name="title_ko_kr"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_ko_kr|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（马来）</span>
+                <input name="title_ms_my"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_ms_my|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（葡萄牙）</span>
+                <input name="title_pt_pt"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_pt_pt|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（西班牙）</span>
+                <input name="title_es_es"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_es_es|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（土耳其）</span>
+                <input name="title_tr_tr"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_tr_tr|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（印尼）</span>
+                <input name="title_id_id"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_id_id|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（德语）</span>
+                <input name="title_de_de"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_de_de|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服名称（法语）</span>
+                <input name="title_fr_fr"  class="layui-input" placeholder="请输入客服名称" value="{$vo.title_fr_fr|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">客服类型</span>
+                <select class="layui-select" name="type" required>
+                    {foreach ['1'=>'第三方客服','2'=>'Telegram','3'=>'WhatsApp'] as $k=>$v}
+                    <!--{eq name='$vo.type' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">是否显示</span>
+                <select class="layui-select" name="show">
+                    {foreach ['1'=>'显示','0'=>'隐藏'] as $k=>$v}
+                    <!--{eq name='$vo.show' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 ">
+                <span class="color-green">客服链接</span>
+                <input name="url" required class="layui-input" placeholder="请输入客服链接" value="{$vo.url|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <span class="color-green label-required-prev">LOGO</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <td width="" height="80px" class="text-center">
+                        <input name="logo" type="hidden" value="{$vo.logo|default=''}">
+                    </td>
+                </tr>
+                </thead>
+            </table>
+            <script>$('[name="logo"]').uploadOneImage()</script>
+        </div>
+        <div class="layui-form-item text-center">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+            <button class="layui-btn" type="submit">保存客服</button>
+        </div>
+
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

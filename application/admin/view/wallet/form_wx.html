@@ -1,0 +1,47 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">类型</span>
+                <input name="wname" readonly class="layui-input layui-bg-gray" placeholder="类型" value="{$vo.wname|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">所属国别</span>
+                <select name='cid' required class='layui-select' lay-search>
+                    {foreach $currencies as $key=>$currency}
+                    {eq name='currency.id' value='$vo.cid|default=0'}
+                    <option selected value='{$currency.id}'>{$currency.country_cn}</option>
+                    {else}
+                    <option value='{$currency.id}'>{$currency.country_cn}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <span class="color-green ">收款码</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <td width="160px" height="80px" class="text-center">
+                        <input name="img" type="hidden" value="{$vo.img|default=''}">
+                    </td>
+                </tr>
+                </thead>
+            </table>
+            <script>$('[name="img"]').uploadOneImage()</script>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

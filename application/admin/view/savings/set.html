@@ -1,0 +1,100 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">活期-利率</span>
+                <input name="flexible_rate" class="layui-input" value="{$vo.flexible_rate|default='0'}%" readonly>
+            </label>
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">活期-最低购买金额</span>
+                <input name="flexible_min" class="layui-input" value="${$vo.flexible_min|default='0'}" readonly>
+            </label>
+            <label class="layui-col-xs2 relative">
+                <span class="color-green" data-tips-text="活期需持有多少天才可以赎回">活期-最低持有天数</span>
+                <input name="flexible_min_day" class="layui-input" value="{$vo.flexible_min_day|default='0'}" readonly>
+            </label>
+        </div>
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+        <!--    <label class="layui-col-xs2 relative">-->
+        <!--        <span class="color-green">定期-利率</span>-->
+        <!--        <input name="fixed_rate" class="layui-input" value="{$vo.fixed_rate|default='0'}" readonly>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs2 relative">-->
+        <!--        <span class="color-green">定期-最低购买金额</span>-->
+        <!--        <input name="fixed_min" class="layui-input" value="${$vo.fixed_min|default='0'}" readonly>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs2 relative">-->
+        <!--        <span class="color-green" data-tips-text="定期最低天数">定期-基础天数</span>-->
+        <!--        <input name="fixed_min_day" class="layui-input" value="{$vo.fixed_min_day|default='0'}" readonly>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs2 relative">-->
+        <!--        <span class="color-green" data-tips-text="例：定期利率2.1，基础天数3天，增加量为0.1，客户申购10天，当前利率为：2.1+(10-3)x0.1=2.8">定期-利率增加量</span>-->
+        <!--        <input name="fixed_inc_rate" class="layui-input" value="{$vo.fixed_inc_rate|default='0'}" readonly>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs2 relative">-->
+        <!--        <span class="color-green">定期-最大利率</span>-->
+        <!--        <input name="fixed_rate_max" class="layui-input" value="{$vo.fixed_rate_max|default='0'}" readonly>-->
+        <!--    </label>-->
+        <!--</div>-->
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs2 relative">
+                <span class="color-green" data-tips-text="超过金额才进行收益">最低收益金额</span>
+                <input name="min_income" class="layui-input" value="${$vo.min_income|default='0'}" readonly>
+            </label>
+        </div>
+        <div class="layui-form-item text-left">
+            点击编辑修改更多数据
+        </div>
+        <div class="layui-form-item text-center">
+            {if auth("set_edit")}
+                <a class="layui-btn" data-open='{:url("set_edit")}?id={$vo.id}'>编 辑</a>
+            {else}
+            <a data-tips-text="您没有编辑的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">编 辑</a>
+            {/if}
+        </div>
+        <div class="layui-form-item text-left">
+            <!--储蓄金分为两种方式：定期、活期<br>-->
+            申购满24小时才可开始收益<br>
+            收益超过指定金额才进行收益<br>
+            活期收益计算时间为北京时间每天23:30，各个语言因为时区原因会有所不同<br>
+            <!--定期增长利率计算方式：<br>-->
+            <!--例：定期利率2.1，基础天数3天，增加量为0.1，客户申购10天，则当前利率为：2.1+(10-3)x0.1=2.8<br>-->
+            <!--定期增加量为0时则为固定利率<br>-->
+        </div>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content_zh_cn"]', {height: 100});
+        window.createEditor('[name="content_zh_hk"]', {height: 100});
+        window.createEditor('[name="content_en_us"]', {height: 100});
+        window.createEditor('[name="content_th_th"]', {height: 100});
+        window.createEditor('[name="content_vi_vn"]', {height: 100});
+        window.createEditor('[name="content_ja_jp"]', {height: 100});
+        window.createEditor('[name="content_ko_kr"]', {height: 100});
+        window.createEditor('[name="content_ms_my"]', {height: 100});
+        window.createEditor('[name="content_pt_pt"]', {height: 100});
+        window.createEditor('[name="content_es_es"]', {height: 100});
+        window.createEditor('[name="content_tr_tr"]', {height: 100});
+        window.createEditor('[name="content_id_id"]', {height: 100});
+        window.createEditor('[name="content_de_de"]', {height: 100});
+        window.createEditor('[name="content_fr_fr"]', {height: 100});
+        var app = angular.module("GoodsForm", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback($rootScope) {
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+
+    })
+</script>
+{/block}

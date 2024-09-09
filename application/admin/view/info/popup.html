@@ -1,0 +1,67 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative" >
+                <span class="color-green">是否显示</span>
+                {if $vo.show == 1}
+                    <input class="layui-input" placeholder="" value="显示" readonly>
+                {else}
+                    <input class="layui-input" placeholder="" value="隐藏" readonly>
+                {/if}
+            </label>
+            <label class="layui-col-xs3 relative" >
+                <span class="color-green">只弹一次</span>
+                {if $vo.num == 1}
+                    <input class="layui-input" placeholder="" value="是" readonly>
+                {else}
+                    <input class="layui-input" placeholder="" value="否" readonly>
+                {/if}
+            </label>
+        </div>
+        <div class="layui-form-item text-left">
+            点击编辑修改更多数据
+        </div>
+        <div class="layui-form-item text-center">
+            {if auth("popup_edit")}
+                <a class="layui-btn" data-open='{:url("popup_edit")}?id={$vo.id}'>编 辑</a>
+            {else}
+            <a data-tips-text="您没有编辑的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">编 辑</a>
+            {/if}
+        </div>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content_zh_cn"]', {height: 100});
+        window.createEditor('[name="content_zh_hk"]', {height: 100});
+        window.createEditor('[name="content_en_us"]', {height: 100});
+        window.createEditor('[name="content_th_th"]', {height: 100});
+        window.createEditor('[name="content_vi_vn"]', {height: 100});
+        window.createEditor('[name="content_ja_jp"]', {height: 100});
+        window.createEditor('[name="content_ko_kr"]', {height: 100});
+        window.createEditor('[name="content_ms_my"]', {height: 100});
+        window.createEditor('[name="content_id_id"]', {height: 100});
+        window.createEditor('[name="content_pt_pt"]', {height: 100});
+        window.createEditor('[name="content_tr_tr"]', {height: 100});
+        window.createEditor('[name="content_es_es"]', {height: 100});
+        window.createEditor('[name="content_de_de"]', {height: 100});
+        window.createEditor('[name="content_fr_fr"]', {height: 100});
+        var app = angular.module("GoodsForm", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback($rootScope) {
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+
+    })
+</script>
+{/block}

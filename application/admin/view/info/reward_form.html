@@ -1,0 +1,58 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">注册赠送</span>
+                <input name="register" class="layui-input" placeholder="请输入注册赠送" value="{$vo.register|default='0.00'}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">注册赠送产品</span>
+                <select class="layui-select" name="item_id">
+                    <option value="0">暂不设置</option>
+                    {foreach $items as $k=>$v}
+                    <!--{eq name='$vo.item_id' value="$v['id']"}-->
+                    <option selected value="{$v['id']}">{$v['title_en_us']}</option>
+                    <!--{else}-->
+                    <option value="{$v['id']}">{$v['title_en_us']}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">邀请注册赠送</span>
+                <input name="invite" class="layui-input" placeholder="请输入邀请注册赠送" value="{$vo.invite|default='0.00'}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">认证赠送（三次）</span>
+                <input name="authentication" class="layui-input" placeholder="请输入认证赠送" value="{$vo.authentication|default='0.00'}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">每日登录赠送</span>
+                <input name="login" class="layui-input" placeholder="请输入每日登录赠送" value="{$vo.login|default='0.00'}" required>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">每日投资赠送</span>
+                <input name="invest" class="layui-input" placeholder="请输入每日投资赠送" value="{$vo.invest|default='0.00'}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">签到积分（整数）</span>
+                <input name="signin" class="layui-input" placeholder="请输入签到积分" value="{$vo.signin|default='0'}" required>
+            </label>
+        </div>
+
+        <div class="layui-form-item  text-center">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn" type="submit">保存设置</button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

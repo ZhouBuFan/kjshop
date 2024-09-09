@@ -1,0 +1,199 @@
+{extend name='admin@main'}
+
+{block name="content"}
+
+<form onsubmit="return false;" id="GoodsForm" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body think-box-shadow padding-left-40">
+
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（简体）</span>
+                <input name="title_zh_cn"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_zh_cn|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（繁体）</span>
+                <input name="title_zh_hk"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_zh_hk|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（英文）</span>
+                <input name="title_en_us"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_en_us|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（泰语）</span>
+                <input name="title_th_th"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_th_th|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（越南）</span>
+                <input name="title_vi_vn"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_vi_vn|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（日语）</span>
+                <input name="title_ja_jp"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_ja_jp|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（韩语）</span>
+                <input name="title_ko_kr"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_ko_kr|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（马来）</span>
+                <input name="title_ms_my"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_ms_my|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（葡萄牙）</span>
+                <input name="title_pt_pt"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_pt_pt|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（西班牙）</span>
+                <input name="title_es_es"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_es_es|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（土耳其）</span>
+                <input name="title_tr_tr"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_tr_tr|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（印尼）</span>
+                <input name="title_id_id"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_id_id|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（德语）</span>
+                <input name="title_de_de"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_de_de|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">通知栏标题（法语）</span>
+                <input name="title_fr_fr"  class="layui-input" placeholder="请输入通知栏标题" value="{$vo.title_fr_fr|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">是否显示</span>
+                <select class="layui-select" name="show">
+                    {foreach ['1'=>'显示','0'=>'隐藏'] as $k=>$v}
+                    <!--{eq name='$vo.show' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">通知栏详情（简体）</span>
+                <textarea name="content_zh_cn">{$vo.content_zh_cn|default='简体'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green label-required-prev">通知栏详情（繁体）</span>
+                <textarea name="content_zh_hk">{$vo.content_zh_hk|default='繁体'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">通知栏详情（英文）</span>
+                <textarea name="content_en_us">{$vo.content_en_us|default='英文'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">通知栏详情（泰语）</span>
+                <textarea name="content_th_th">{$vo.content_th_th|default='泰语'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">通知栏详情（越南）</span>
+                <textarea name="content_vi_vn">{$vo.content_vi_vn|default='越南'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">通知栏详情（日语）</span>
+                <textarea name="content_ja_jp">{$vo.content_ja_jp|default='日语'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">通知栏详情（韩语）</span>
+                <textarea name="content_ko_kr">{$vo.content_ko_kr|default='韩语'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">通知栏详情（马来）</span>
+                <textarea name="content_ms_my">{$vo.content_ms_my|default='马来'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">通知栏详情（葡萄牙）</span>
+                <textarea name="content_pt_pt">{$vo.content_pt_pt|default='葡萄牙'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">通知栏详情（西班牙）</span>
+                <textarea name="content_es_es">{$vo.content_es_es|default='西班牙'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">通知栏详情（土耳其）</span>
+                <textarea name="content_tr_tr">{$vo.content_tr_tr|default='土耳其'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">通知栏详情（印尼）</span>
+                <textarea name="content_id_id">{$vo.content_id_id|default='印尼'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">通知栏详情（德语）</span>
+                <textarea name="content_de_de">{$vo.content_de_de|default='德语'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">通知栏详情（法语）</span>
+                <textarea name="content_fr_fr">{$vo.content_fr_fr|default='法语'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item text-center">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+            <button class="layui-btn" type="submit">保存通知栏</button>
+        </div>
+
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    window.form.render();
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content_zh_cn"]', {height: 100});
+        window.createEditor('[name="content_zh_hk"]', {height: 100});
+        window.createEditor('[name="content_en_us"]', {height: 100});
+        window.createEditor('[name="content_th_th"]', {height: 100});
+        window.createEditor('[name="content_vi_vn"]', {height: 100});
+        window.createEditor('[name="content_ja_jp"]', {height: 100});
+        window.createEditor('[name="content_ko_kr"]', {height: 100});
+        window.createEditor('[name="content_ms_my"]', {height: 100});
+        window.createEditor('[name="content_pt_pt"]', {height: 100});
+        window.createEditor('[name="content_es_es"]', {height: 100});
+        window.createEditor('[name="content_tr_tr"]', {height: 100});
+        window.createEditor('[name="content_id_id"]', {height: 100});
+        window.createEditor('[name="content_de_de"]', {height: 100});
+        window.createEditor('[name="content_fr_fr"]', {height: 100});
+        var app = angular.module("GoodsForm", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback($rootScope) {
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+
+    })
+</script>
+{/block}

@@ -1,0 +1,67 @@
+<fieldset>
+    <legend>条件搜索</legend>
+    <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">用户账号</label>
+            <div class="layui-input-inline">
+                <input name="u_username" value="{$Think.get.u_username|default=''}" placeholder="请输入用户账号" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">项目名称</label>
+            <div class="layui-input-inline">
+                <input name="it_title" value="{$Think.get.it_title|default=''}" placeholder="请输入项目名称" class="layui-input">
+            </div>
+        </div>
+      <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">产品id</label>
+            <div class="layui-input-inline">
+                <input name="itemid" value="{$Think.get.itemid|default=''}" placeholder="请输入产品id" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">后台账户</label>
+            <div class="layui-input-inline">
+                <input name="sys_username" value="{$Think.get.sys_username|default=''}" placeholder="请输入后台账户" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">投资时间（实际时间）</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="i_time" value="{$Think.get.i_time|default=''}" placeholder="请选择投资时间" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">是否过期</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="status">
+                    {foreach [''=>'-- 全部状态 --','1'=>'过期','0'=>'未过期'] as $k=>$v}
+                    {eq name='$Think.get.status' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">购买类型</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="is_withdrawal_purchase">
+                    {foreach [''=>'-- 全部状态 --','1'=>'余额钱包','0'=>'充值钱包'] as $k=>$v}
+                    {eq name='$Think.get.is_withdrawal_purchase' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        </div>
+    </form>
+    <script>form.render()</script>
+</fieldset>

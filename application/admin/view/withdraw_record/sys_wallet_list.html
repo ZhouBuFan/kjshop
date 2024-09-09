@@ -1,0 +1,41 @@
+{extend name='admin@main'}
+
+{block name="button"}
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-center nowrap'>系统钱包</th>
+            <th></th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr data-dbclick>
+            <td class='text-center nowrap'>
+                {$vo.address|default=''}
+            </td>
+            <td class='text-center nowrap'>
+                <div class="nowrap margin-bottom-5">
+                    {if auth("pay")}
+                         <a class="layui-btn layui-btn layui-btn-xs"  data-action="{:url('pay')}" data-value="id#{$vo.id};rrid#{$rrid}" data-csrf="{:systoken('pay')}">选择</a>
+                    {else}
+                    <a data-tips-text="您没有支付的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">选择</a>
+                    {/if}
+                </div>
+
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+
+</div>
+{/block}

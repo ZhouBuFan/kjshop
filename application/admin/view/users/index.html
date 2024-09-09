@@ -1,0 +1,211 @@
+{extend name='main'}
+
+{block name="button"}
+
+<button data-modal='{:url("add")}' data-title="添加用户（至少存在1个用户才可添加）" class='layui-btn layui-btn-sm layui-btn-primary'>添加用户</button>
+
+{if auth("forbid")}
+<button data-action='{:url("forbid")}' data-rule="id#{key}" data-csrf="{:systoken('forbid')}" data-confirm="确定要冻结这些用户吗？" class='layui-btn layui-btn-sm layui-btn-primary'>冻结用户</button>
+{/if}
+
+{if auth("remove")}
+<button data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" data-confirm="确定要删除这些用户吗？" class='layui-btn layui-btn-sm layui-btn-primary'>删除用户</button>
+{/if}
+
+{if auth("setreal")}
+<button data-action='{:url("setreal")}' data-rule="id#{key}" data-csrf="{:systoken('setreal')}" data-confirm="确定要设置这些用户吗？" class='layui-btn layui-btn-sm layui-btn-primary'>模拟用户</button>
+{/if}
+
+{if auth("setnoreal")}
+<button data-action='{:url("setnoreal")}' data-rule="id#{key}" data-csrf="{:systoken('setnoreal')}" data-confirm="确定要取消设置这些用户吗？" class='layui-btn layui-btn-sm layui-btn-primary'>取消模拟用户</button>
+{/if}
+
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='users/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'></label>
+            </th>
+            <th class='text-left '>真假</th>
+            <th class='text-left '>用户号码</th>
+            <th class='text-left '>上级</th>
+            <th class='text-left '>上上级</th>
+            <th class='text-left '>归属</th>
+            <th class='text-left '>邀请码</th>
+            <th class='text-left '>状态</th>
+            <th class='text-left '>vip等级</th>
+            <th class='text-left '>总充值</th>
+            <th class='text-left '>总提现</th>
+            <th class='text-left '>结余</th>
+            <th class='text-left '>充值钱包</th>
+            <th class='text-left '>提现钱包</th>
+            <th class='text-left '>积分</th>
+            
+            <th class='text-left '>抽奖</th>
+            <th class='text-left '>待收利息</th>
+            <th class='text-left '>总投资</th>
+            <th class='text-left '>直接下级</th>
+            <th class='text-left '>间接下级</th>
+            <th class='text-left '>有效下级</th>
+            <th class='text-left '>最近操作</th>
+            <th class='text-left '>注册时间</th>
+            <!--<th class='text-left '>推广情况</th>-->
+            <!--<th class='text-left '>时间</th>-->
+             <th class='text-left '>注册ip</th>
+            <!--<th class='text-left '>收货地址</th>-->
+            <th class='text-left ' >操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr data-dbclick>
+            <td class='list-table-check-td think-checkbox'>
+                <label><input class="list-check-box" value='{$vo.id}' type='checkbox'></label>
+            </td>
+            <td class='text-left '>
+                {eq name='vo.is_real' value='1'}
+                <span class="color-green">模拟</span>
+                {else}
+                真人
+                {/eq}
+                
+            </td>
+            <td class='text-left '>
+                {$vo.username|default='--'}
+                
+            </td>
+            <td class='text-left '>
+                {$vo.top|default='--'}
+                
+            </td>
+            <td class='text-left '>
+                {$vo.toptop|default='--'}
+                
+            </td>
+            <td class='text-left '>
+                {$vo.s_name|default='--'}
+            </td>
+            <td class='text-left '>
+                {$vo.invite_code|default='--'}
+                
+            </td>
+            <td class='text-left '>
+                {eq name='vo.online' value='1'}
+                <span class="color-green">在线</span>
+                {else}
+                离线
+                {/eq}
+            </td>
+           <td class='text-left '>
+                {$vo.vip_name|default='--'}
+                
+            </td>
+            <td class='text-left '>
+               {$vo.recharge_sum|number_format=2}
+            </td>
+             <td class='text-left '>
+               {$vo.withdraw_sum|number_format=2}
+            </td>
+             <td class='text-left '>
+               {$vo.surplus_sum|number_format=2}
+            </td>
+            <td class='text-left '>
+               {$vo.money|number_format=2}
+            </td>
+            <td class='text-left '>
+               {$vo.withdrawable|number_format=2}
+            </td>
+            <td class='text-left '>
+               {$vo.point|number_format=2}
+            </td>
+             
+            <td class='text-left '>
+               {$vo.draw_num|default='--'}
+            </td>
+            <td class='text-left '>
+               {$vo.invest_wait_rate|number_format=2}
+            </td>
+            <td class='text-left '>
+               {$vo.invest_sum|number_format=2}
+            </td>
+           <td class='text-left '>
+              {$vo.tema_direct_count}
+            </td>
+            <td class='text-left '>
+              {$vo.tema_indirect_count}
+            </td>
+            <td class='text-left '>
+              {$vo.tema_effective_direct_count}
+            </td>
+            <td class='text-left '>
+              {$vo.logintime}
+            </td>
+            <td class='text-left '>
+              {$vo.act_time}
+            </td>
+            <!--<td class='text-left '>-->
+            <!--    我的上级：{$vo.top|default='--'}<br>-->
+            <!--    我的管理员上级：{$vo.s_name|default='--'}<br>-->
+            <!--    直接下级：{$vo.tema_direct_count}（人）<br>-->
+            <!--    有效下级：{$vo.tema_effective_direct_count}（人）<br>-->
+            <!--    间接下级：{$vo.tema_indirect_count}（人）<br>-->
+            <!--    团队余额：${$vo.tema_all_money|number_format=2}-->
+            <!--</td>-->
+            <!--<td class='text-left '>-->
+            <!--    最近操作：{$vo.logintime}<br>-->
+            <!--    注册时间：{$vo.time}<br>-->
+            <!--    实际时间：{$vo.act_time}<br>-->
+            <!--    注册时区：{$vo.time_zone}-->
+            <!--</td>-->
+            <td class='text-left '>
+                {$vo.ip|default='--'}（{$vo.isp|default='--'}）
+            </td>
+            <!--<td class='text-left '>-->
+            <!--    {$vo.address}-->
+            <!--</td>-->
+            <td class='text-left '>
+                {if auth("edit")}
+                <a class="layui-btn layui-btn-sm" data-title="编辑用户" data-modal='{:url("edit")}?id={$vo.id}'>编 辑</a>
+                {else}
+                <!--<a data-tips-text="您没有编辑用户的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">编 辑</a>-->
+                {/if}
+
+                {if auth("add_invest")}
+                <a class="layui-btn layui-btn-sm" data-title="添加投资" data-modal='{:url("add_invest")}?id={$vo.id}'>添加投资</a>
+                {/if}
+                
+                {if auth("add_record")}
+                <a class="layui-btn layui-btn-sm" data-title="添加充值" data-modal='{:url("add_record")}?id={$vo.id}'>充值</a>
+                {/if}
+                {if auth("add_record_method")}
+                <a class="layui-btn layui-btn-sm" data-title="添加充值" data-modal='{:url("add_record_method")}?id={$vo.id}'>拉充值</a>
+                {/if}
+                {if $vo.clock eq 0 and auth("forbid")}
+                <a class="layui-btn layui-btn-sm layui-btn-warm" data-action="{:url('forbid')}" data-value="id#{$vo.id};clock#0" data-csrf="{:systoken('forbid')}">冻 结</a>
+                {elseif $vo.clock eq 1 and auth("resume")}
+                <a class="layui-btn layui-btn-sm layui-btn-warm" data-action="{:url('resume')}" data-value="id#{$vo.id};clock#1" data-csrf="{:systoken('resume')}">解 冻</a>
+                {else}
+                    <!-- <a data-tips-text="您没有冻结用户的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">冻 结</a> -->
+                {/if}
+                
+                {if auth("remove")}
+                <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除该用户吗?" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>
+                {else}
+                <!-- <a data-tips-text="您没有删除用户的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">删 除</a> -->
+                <!--{/if}-->
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+
+{/block}

@@ -1,0 +1,48 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;" id="DrawFrom" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">选择奖品</span>
+                <select class="layui-select" name="draw_prize_id" lay-search required>
+                    {foreach $vo['prizes'] as $k=>$v}
+                    <option value="{$v.id}">{$v.title_zh_cn}</option>
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">选择人员</span>
+                <select name="uid" lay-search>
+                    {foreach $vo['users'] as $k=>$v}
+                    <option value="{$v.id}">{$v.username}</option>
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+    require(['angular'], function () {
+        var app = angular.module("DrawFrom", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+        function callback($rootScope) {
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+
+    })
+</script>
+{/block}

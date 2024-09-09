@@ -1,0 +1,240 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">网站名称</span>
+                <input name="webname" class="layui-input" placeholder="请输入网站名称" value="{$vo.webname|default=''}" readonly>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green" data-tips-text="关闭为用户名注册">手机号注册</span>
+                <select class="layui-select" name="phone_register" disabled>
+                    {foreach ['0'=>'关闭','1'=>'开启'] as $k=>$v}
+                    <!--{eq name='$vo.phone_register' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">邀请码</span>
+                <select class="layui-select" name="invite_code" disabled>
+                    {foreach ['0'=>'选填','1'=>'必填'] as $k=>$v}
+                    <!--{eq name='$vo.invite_code' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green" data-tips-text="用户邀请用户最多几个层级">分销级别</span>
+                <input name="invite_level" class="layui-input" placeholder="请输入分销级别" value="{$vo.invite_level|default=''}" readonly>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">认证方式-手机号</span>
+                <select class="layui-select" name="auth_phone" disabled>
+                    {foreach ['0'=>'关闭','1'=>'开启'] as $k=>$v}
+                    <!--{eq name='$vo.auth_phone' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">认证方式-邮箱</span>
+                <select class="layui-select" name="auth_email" disabled>
+                    {foreach ['0'=>'关闭','1'=>'开启'] as $k=>$v}
+                    <!--{eq name='$vo.auth_email' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">认证方式-Authenticator</span>
+                <select class="layui-select" name="auth_google" disabled>
+                    {foreach ['0'=>'关闭','1'=>'开启'] as $k=>$v}
+                    <!--{eq name='$vo.auth_google' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">需要认证才可资金操作</span>
+                <select class="layui-select" name="funding_need_auth" disabled>
+                    {foreach ['0'=>'手机号认证','1'=>'邮箱认证','2'=>'Authenticator','3'=>'都要','4'=>'不需要'] as $k=>$v}
+                    <!--{eq name='$vo.funding_need_auth' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            
+            <label class="layui-col-xs3 relative">
+                <span class="color-green" data-tips-text="开启会影响首次打开速度">根据用户IP切换语言</span>
+                <select class="layui-select" name="auto_lang" disabled>
+                    {foreach ['0'=>'关闭','1'=>'开启'] as $k=>$v}
+                    <!--{eq name='$vo.auto_lang' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">IP可注册次数</span>
+                <input name="num_ip" class="layui-input" placeholder="请输入IP可注册次数" value="{$vo.num_ip|default=''}" readonly>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">充值需要一倍流水才可提现</span>
+                <select class="layui-select" name="recharge_need_flow" disabled>
+                    {foreach ['0'=>'不需要','1'=>'需要'] as $k=>$v}
+                    <!--{eq name='$vo.recharge_need_flow' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">奖励需要一倍流水才可提现</span>
+                <select class="layui-select" name="reward_need_flow" disabled>
+                    {foreach ['0'=>'不需要','1'=>'需要'] as $k=>$v}
+                    <!--{eq name='$vo.reward_need_flow' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green" data-tips-text="需要配置优盾钱包">用户USDT地址校验<span class="color-red"></span></span>
+                <select class="layui-select" name="check_address" disabled>
+                    {foreach ['0'=>'关闭','1'=>'开启'] as $k=>$v}
+                    <!--{eq name='$vo.check_address' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green" data-tips-text="首次登录不需要填写">后台谷歌验证</span>
+                <select class="layui-select" name="back_google" disabled>
+                    {foreach ['0'=>'关闭','1'=>'开启'] as $k=>$v}
+                    <!--{eq name='$vo.back_google' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">后台IP白名单</span>
+                <select class="layui-select" name="back_limit" disabled>
+                    {foreach ['0'=>'关闭','1'=>'开启'] as $k=>$v}
+                    <!--{eq name='$vo.back_limit' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">后台IP白名单</span>
+                <input name="white_ip" class="layui-input" placeholder="" value="点击编辑查看" readonly>
+            </label>
+        </div>
+        
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">网站禁用IP</span>
+                <input name="ban_ip" class="layui-input" placeholder="" value="{$vo.ban_ip|default=''}" readonly>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">前端域名</span>
+                <input name="domain" class="layui-input" placeholder="请输入前端域名" value="点击编辑查看" readonly>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">后端接口域名</span>
+                <input name="domain_api" class="layui-input" placeholder="请输入接口域名" value="点击编辑查看" readonly>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">宝塔计划任务白名单IP</span>
+                <input name="task_ip" class="layui-input" placeholder="请输入宝塔计划任务白名单IP" value="点击编辑查看" readonly>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">网站LOGO</span>
+                <br>
+                <img data-tips-image style="height:80px" src="{$vo.logo_img|default=''}" class="margin-right-5 text-top">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">首页LOGO</span>
+                <br>
+                <img data-tips-image style="height:80px" src="{$vo.logo_img2|default=''}" class="margin-right-5 text-top">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">用户头像</span>
+                <br>
+                <img data-tips-image style="height:80px" src="{$vo.user_img|default=''}" class="margin-right-5 text-top">
+            </label>
+        </div>
+        <div class="layui-form-item text-center">
+            {if auth("set_edit")}
+                <a class="layui-btn" data-modal='{:url("set_edit")}?id={$vo.id}'>编 辑</a>
+            {else}
+            <a data-tips-text="您没有编辑的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">编 辑</a>
+            {/if}
+        </div>
+    </div>
+</form>
+<style>
+    .uploadimage{
+        max-width: 400px;
+    }
+    .right-btn {
+        top: 33px;
+        right: 0;
+        width: 38px;
+        height: 38px;
+        display: inline-block;
+        position: absolute;
+        text-align: center;
+        line-height: 38px;
+    }
+</style>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

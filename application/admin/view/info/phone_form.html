@@ -1,0 +1,35 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">接口（国内）</span>
+                <input name="host_cn" class="layui-input" placeholder="请输入接口地址" value="{$vo.host_cn|default=''}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">接口（国际）</span>
+                <input name="host_wo" class="layui-input" placeholder="请输入接口地址" value="{$vo.host_wo|default=''}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">用户名</span>
+                <input name="username" class="layui-input" placeholder="请输入用户名" value="{$vo.username|default=''}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">API Key</span>
+                <input name="password" class="layui-input" placeholder="请输入API Key" value="{$vo.password|default=''}" required>
+            </label>
+        </div>
+
+        <div class="layui-form-item text-center">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn" type="submit">保存设置</button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

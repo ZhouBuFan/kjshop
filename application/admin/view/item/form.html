@@ -1,0 +1,206 @@
+{extend name='admin@main'}
+
+{block name="content"}
+
+
+<form onsubmit="return false;" id="GoodsForm" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body think-box-shadow padding-left-40">
+
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">项目分类</span>
+                <select class="layui-select" required name="cid" lay-search>
+                    {foreach $class as $cate}
+                    {if isset($vo.class) and $vo.class eq $cate.id}
+                    <option selected value="{$cate.id}">{$cate.spl|raw}{$cate.zh_cn|default=''}</option>
+                    {else}
+                    <option value="{$cate.id}">{$cate.spl|raw}{$cate.zh_cn|default=''}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">vip等级限制</span>
+                <select class="layui-select" name="vip_level" lay-search>
+                    {if isset($vo.vip_level) and $vo.vip_level eq 0}
+                    <option selected value="0">请选择vip等级限制</option>
+                    {else}
+                    <option value="0">请选择vip等级限制</option></option>
+                    {/if}
+                    {foreach $viplists as $cate}
+                    {if isset($vo.vip_level) and $vo.vip_level eq $cate.id}
+                    <option selected value="{$cate.id}">{$cate.name|default=''}</option>
+                    {else}
+                    <option value="{$cate.id}">{$cate.name|default=''}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">显示/隐藏</span>
+                <select class="layui-select" name="show" required>
+                    {foreach ['0'=>'隐藏','1'=>'显示'] as $k=>$v}
+                    <!--{eq name='$vo.show' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">还款类型</span>
+                <select class="layui-select" name="type" required>
+                    {foreach ['1'=>'每日付息到期还本','2'=>'到期还本付息（日）','3'=>'到期还本付息（时）','4'=>'按日反息 到期不反本（日）','5'=>'定投','6'=>'次数产品8小时','7'=>'次数产品6小时','8'=>'机器定投','9'=>'税务机器','10'=>'加速卡'] as $k=>$v}
+                    <!--{eq name='$vo.type' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">是否分销</span>
+                <select class="layui-select" name="is_distribution" required>
+                    {foreach ['1'=>'是','0'=>'否'] as $k=>$v}
+                    <!--{eq name='$vo.is_distribution' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">利率（%）</span>
+                <input name="rate" required class="layui-input" placeholder="请输入利率（%）" value="{$vo.rate|default=''}">
+            </label>
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">提现余额购买折扣（%）</span>
+                <input name="withdrawal_purchase" required class="layui-input" placeholder="请输入利率（%）" value="{$vo.withdrawal_purchase|default=''}">
+            </label>
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">周期（天/时）</span>
+                <input name="day" required class="layui-input" placeholder="请输入周期（天）" value="{$vo.day|default=''}">
+            </label>
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">不可领取设置</span><br>
+                <p><input type="checkbox" name="not_receive[]" lay-ignore <?php echo (in_array(1, $vo['not_receive']) ? 'checked' : ''); ?> value="1" title="周一到周五" lay-skin="primary">周一到周五</p>
+                <p><input type="checkbox" name="not_receive[]" lay-ignore <?php echo (in_array(2, $vo['not_receive']) ? 'checked' : ''); ?> value="2" title="周六" lay-skin="primary"> 周六</p>
+                <p><input type="checkbox" name="not_receive[]" lay-ignore <?php echo (in_array(3, $vo['not_receive']) ? 'checked' : ''); ?> value="3" title="周日" lay-skin="primary"> 周日</p>
+   
+            </label>
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">投资金额</span>
+                <input name="min" required class="layui-input" placeholder="请输入最小投资金额" value="{$vo.min|default=''}">
+            </label>
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">可投资次数</span>
+                <input name="num" required class="layui-input" placeholder="请输入可投资次数" value="{$vo.num|default=''}">
+            </label>
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">赠送上级抽奖次数</span>
+                <input name="superior_draw_num" required class="layui-input" placeholder="请输入可投资次数" value="{$vo.superior_draw_num|default='0'}">
+            </label>
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">赠送购买者抽奖次数</span>
+                <input name="draw_num" required class="layui-input" placeholder="请输入可投资次数" value="{$vo.draw_num|default='0'}">
+            </label>
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">K线走势范围 , 隔开0-不固定投资额 1-固定投资额)</span>
+                <input name="k_range" required class="layui-input" placeholder="请输入走势范围" value="{$vo.k_range|default=''}">
+            </label>
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">购买所需积分</span>
+                <input name="need_integral" class="layui-input" placeholder="请输入购买所需积分" value="{$vo.need_integral|default='0'}">
+            </label>
+            <label class="layui-col-xs1 relative">
+                <span class="color-green">赠送积分</span>
+                <input name="gifts_integral" class="layui-input" placeholder="请输入赠送积分" value="{$vo.gifts_integral|default='0'}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">项目名称（英文）</span>
+                <input name="title_en_us"  class="layui-input" placeholder="请输入项目名称" value="{$vo.title_en_us|default=''}">
+            </label>
+        </div>
+        <!--<div class="layui-form-item">-->
+        <!--    <span class="color-green">项目封面图片（尺寸： 200:200）</span>-->
+        <!--    <table class="layui-table">-->
+        <!--        <thead>-->
+        <!--        <tr>-->
+        <!--            <th class="text-center">项目封面图片</th>-->
+        <!--        </tr>-->
+        <!--        <tr>-->
+        <!--            <td width="90px" class="text-center"><input name="img" type="hidden" value="{$vo.img|default=''}"></td>-->
+        <!--        </tr>-->
+        <!--        </thead>-->
+        <!--    </table>-->
+        <!--    <script>$('[name="img"]').uploadOneImage()</script>-->
+        <!--</div>-->
+        <div class="layui-form-item">
+            <span class="color-green">项目封面图片（尺寸： 750:390）</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th class="text-center">项目详情图片</th>
+                </tr>
+                <tr>
+                    <td width="90px" class="text-center"><input name="img2" type="hidden" value="{$vo.img2|default=''}"></td>
+                </tr>
+                </thead>
+            </table>
+            <script>$('[name="img2"]').uploadOneImage()</script>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">项目详情（英文）</span>
+                <textarea name="content_en_us">{$vo.content_en_us|default='英文'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item text-center">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn layui-btn-danger" ng-click="hsitoryBack()" type="button">取消编辑</button>
+            <button class="layui-btn" type="submit">保存项目</button>
+        </div>
+
+    </div>
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    window.form.render();
+    require(['ckeditor', 'angular'], function () {
+        // window.createEditor('[name="content_zh_cn"]', {height: 100});
+        // window.createEditor('[name="content_zh_hk"]', {height: 100});
+        window.createEditor('[name="content_en_us"]', {height: 100});
+        // window.createEditor('[name="content_th_th"]', {height: 100});
+        // window.createEditor('[name="content_vi_vn"]', {height: 100});
+        // window.createEditor('[name="content_ja_jp"]', {height: 100});
+        // window.createEditor('[name="content_ko_kr"]', {height: 100});
+        // window.createEditor('[name="content_ms_my"]', {height: 100});
+        // window.createEditor('[name="content_pt_pt"]', {height: 100});
+        // window.createEditor('[name="content_es_es"]', {height: 100});
+        // window.createEditor('[name="content_tr_tr"]', {height: 100});
+        // window.createEditor('[name="content_id_id"]', {height: 100});
+        // window.createEditor('[name="content_de_de"]', {height: 100});
+        // window.createEditor('[name="content_fr_fr"]', {height: 100});
+        var app = angular.module("GoodsForm", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback($rootScope) {
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+
+    }) 
+</script>
+{/block}

@@ -1,0 +1,145 @@
+<form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">用户账号</span>
+                <input readonly name="username" class="layui-input layui-bg-gray" placeholder="请输入用户账号" value="{$vo.username|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">邀请码</span>
+                <input readonly name="invite_code" class="layui-input layui-bg-gray" placeholder="请输入邀请码" value="{$vo.invite_code|default=''}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">注册时区</span>
+                <input readonly name="time_zone" class="layui-input layui-bg-gray" placeholder="请输入注册时区" value="{$vo.time_zone|default=''}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">手机认证</span>
+                <select class="layui-select" name="auth_phone" required>
+                    {foreach ['0'=>'未认证','1'=>'已认证'] as $k=>$v}
+                    <!--{eq name='$vo.auth_phone' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">邮箱认证</span>
+                <select class="layui-select" name="auth_email" required>
+                    {foreach ['0'=>'未认证','1'=>'已认证'] as $k=>$v}
+                    <!--{eq name='$vo.auth_email' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">谷歌认证</span>
+                <select class="layui-select" name="auth_google" required>
+                    {foreach ['0'=>'未认证','1'=>'已认证'] as $k=>$v}
+                    <!--{eq name='$vo.auth_google' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">余额</span>
+                <input name="money" class="layui-input" required placeholder="请输入余额" value="{$vo.money|default='0'}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">登录密码（有填写则修改）</span>
+                <input name="password_temp" class="layui-input" placeholder="请输入登录密码" value="">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">签到积分</span>
+                <input name="point" class="layui-input" required placeholder="请输入签到积分" value="{$vo.point|default='0'}">
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">会员设置</span>
+                <select class="layui-select" name="mid" required>
+                    {foreach $vo['member'] as $k=>$v}
+                    <!--{eq name='$vo.mid' value='$v.id'}-->
+                    <option selected value="{$v.id}">{$v.name}</option>
+                    <!--{else}-->
+                    <option value="{$v.id}">{$v.name}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">抽奖次数</span>
+                <input name="draw_num" class="layui-input" required placeholder="请输入抽奖次数" value="{$vo.draw_num|default='0'}">
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">提现余额</span>
+                <input name="withdrawable" class="layui-input" required placeholder="请输入抽奖次数" value="{$vo.withdrawable|default='0.00'}">
+            </label>
+           
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">允许充值</span></span>
+                <select class="layui-select" name="is_recharge" required>
+                    {foreach ['0'=>'否','1'=>'是'] as $k=>$v}
+                    <!--{eq name='$vo.is_recharge' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">允许邀请</span></span>
+                <select class="layui-select" name="is_invite" required>
+                    {foreach ['0'=>'否','1'=>'是'] as $k=>$v}
+                    <!--{eq name='$vo.is_invite' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">允许提现</span></span>
+                <select class="layui-select" name="is_withdrawal" required>
+                    {foreach ['0'=>'否','1'=>'是'] as $k=>$v}
+                    <!--{eq name='$vo.is_withdrawal' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

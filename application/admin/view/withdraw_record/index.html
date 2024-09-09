@@ -1,0 +1,211 @@
+{extend name='admin@main'}
+{block name="button"}
+{if auth("remove")}
+<button data-action='{:url("remove")}' data-rule="id#{key}" data-csrf="{:systoken('remove')}" data-confirm="确定要删除这些记录吗？" class='layui-btn layui-btn-sm layui-btn-primary'>删除记录</button>
+{/if}
+{if auth("agree")}
+<button data-action='{:url("agree")}' data-rule="id#{key}" data-csrf="{:systoken('agree')}" data-confirm="确定要同意这些记录吗？" class='layui-btn layui-btn-sm layui-btn-primary'>批量同意</button>
+{/if}
+{if auth("refuse")}
+<button data-action='{:url("refuse")}' data-rule="id#{key}" data-csrf="{:systoken('refuse')}" data-confirm="确定要拒绝这些提现吗？" class='layui-btn layui-btn-sm layui-btn-primary'>批量拒绝</button>
+{/if}
+{/block}
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='withdraw_record/index_search'}
+    <p>
+        <h2>提现成功率：{$success_rate|default='--'}</h2>
+    </p>
+    <p>
+        <h2>今日提现金额：{$today_recharge|default='--'}</h2>
+    </p>
+    <p>
+        <h2>今日成功提现笔数：{$today_recharge_num|default='--'}</h2>
+    </p>
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'></label>
+            </th>
+            <th class='text-left'>用户</th>
+            <th class="text-left">提现金额</th>
+            <th class="text-left">订单号</th>
+            <th class="text-left">所属</th>
+            <th class="text-left">代付类型</th>
+            <th class="text-left">提现信息</th>
+            <th class="text-left">当前绑定钱包数据</th>
+            <th class="text-left">用户信息</th>
+            <th class="text-left">二维码</th>
+            <th class="text-left">查看已投项目</th>
+            <th class="text-left">提交时间</th>
+            <th class="text-left">处理进度</th>
+            <th class="text-left">操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='list-table-check-td think-checkbox'>
+                <label><input class="list-check-box" value='{$vo.id}' type='checkbox'></label>
+            </td>
+            <td class='text-left'>
+                {$vo.username|default='--'}
+            </td>
+            <td class='text-left'>
+                提现金额：{$vo.money|number_format=2}
+                <!-- <br>实际金额：
+                {if isset($vo.wallet_type) && $vo.wallet_type==1}
+                    ${$vo.money2|number_format=2}&nbsp;
+                {else}
+                    ${$vo.money2|number_format=2}&nbsp;
+                {/if} -->
+                {if $vo.charge>0}
+                    <span class="color-red">手续费：${$vo.charge|number_format=2}</span><br>
+                {/if}
+            </td>
+            <td>
+                订单号：{$vo.orderNo|default='--'}<br>
+                流水号：{$vo.serial_number|default='--'}<br>
+            </td>
+            <td>
+                所属业务员：{$vo.s_name|default='--'} <br>
+                我的上级：{$vo.top|default='--'} <br>
+            </td>
+             <td>
+                {if isset($vo.type) && $vo.type==1}
+                onepay<br>
+                {elseif isset($vo.type) && $vo.type==2}
+                jmpay<br>
+                {else}
+                xlpay<br>
+                {/if}
+            </td>
+            <td class='text-left'>
+              
+                    {if isset($vo.wallet_type) && $vo.wallet_type==1}
+                        货币：USDT<br>
+                    {else}
+                        货币：{$vo.currency|default='--'}<br>
+                    {/if}
+                    
+                    {if isset($vo.wallet_type) && $vo.wallet_type==1}
+                        {$vo.wallet_wname|default='--'}
+                        <br>地址：{$vo.wallet_account|default='--'}
+                    {elseif isset($vo.wallet_type) && $vo.wallet_type==2}
+                        {$vo.wallet_wname|default='--'}
+                        <br>账号：{$vo.wallet_account|default='--'}
+                    {elseif isset($vo.wallet_type) && $vo.wallet_type==3}
+                        {$vo.wallet_wname|default='--'}
+                        <br>账号：{$vo.wallet_account|default='--'}
+                    {elseif isset($vo.wallet_type) && $vo.wallet_type==4}
+                        银行：{$vo.wallet_wname|default='--'}
+                        <br>姓名：{$vo.wallet_name|default='--'}
+                        <br>卡号：{$vo.wallet_account|default='--'}
+                    {/if}
+                
+            </td>
+            <td class='text-left'>
+
+                {if isset($vo.wallet_type2) && $vo.wallet_type2==1}
+                    货币：USDT<br>
+                {else}
+                    货币：{$vo.currency2|default='--'}<br>
+                {/if}
+                
+                {if isset($vo.wallet_type2) && $vo.wallet_type2==1}
+                    {$vo.wallet_wname2|default='--'}
+                    <br>地址：{$vo.wallet_account2|default='--'}
+                {elseif isset($vo.wallet_type2) && $vo.wallet_type2==2}
+                    {$vo.wallet_wname2|default='--'}
+                    <br>账号：{$vo.wallet_account2|default='--'}
+                {elseif isset($vo.wallet_type2) && $vo.wallet_type2==3}
+                    {$vo.wallet_wname2|default='--'}
+                    <br>账号：{$vo.wallet_account2|default='--'}
+                {elseif isset($vo.wallet_type2) && $vo.wallet_type2==4}
+                    银行：{$vo.wallet_wname2|default='--'}
+                    <br>姓名：{$vo.wallet_name2|default='--'}
+                    <br>卡号：{$vo.wallet_account2|default='--'}
+                {/if}
+        </td>
+        <td class='text-left'>
+            总充值：{$vo.recharge_sum|default='--'}
+            <br>总提现：{$vo.withdraw_sum|default='--'}
+            <br>总结余：{$vo.surplus_sum|default='--'}
+        </td>
+            <td class='text-left'>
+                {notempty name='vo.wallet_img'}
+                    <img data-tips-image style="width:60px;height:60px" src="{$vo.wallet_img|default=''}" class="margin-right-5 text-top">
+                {/notempty}
+            </td>
+            <td class='text-left'>
+                {if auth("admin/invest_list/detail")}
+                <a data-title="查看详情" class="layui-btn layui-btn-sm" data-open='{:url("admin/invest/index")}?u_username={$vo.username}'>查看详情</a>
+                {/if}
+            </td>
+            <td class='text-left'>
+                系统时间：{$vo.time|default='--'}
+                <br>实际时间：{$vo.act_time|default='--'}
+                <br>实际时区：{$vo.time_zone|default='--'}
+                <br>同意时间：{$vo.time2|default='--'}
+            </td>
+            <td class='text-left'>
+                {if $vo.status == 0}
+                <span class="color-red">审核中</span>
+                {/if}
+                {if $vo.status == 1}
+                <span class="color-green">已完成</span>
+                {/if}
+                {if $vo.status == 2}
+                <span class="color-desc">提现失败({$vo.remark|default='--'})</span>
+                {/if}
+                {if $vo.status == 3}
+                <span class="color-red">审核中</span>
+                {/if}
+                {if $vo.status == 4}
+                <span class="color-red">代付中</span>
+                {/if}
+            </td>
+            <td class='text-left'>
+                {if $vo.status eq 0}
+                    {if isset($vo.wallet_type) && $vo.wallet_type==1}
+                        {if auth("agree_yd")}
+                        <a class="layui-btn layui-btn layui-btn-xs layui-btn-normal" data-confirm="确定要同意提现吗？" data-action="{:url('pay')}" data-value="id#{$vo.id}" data-csrf="{:systoken('pay')}">优盾代付</a>
+                        {else}
+                            <a data-tips-text="您没有代付的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">优盾代付</a>
+                        {/if}
+                        {if auth("agree")}
+                        <a class="layui-btn layui-btn layui-btn-xs" data-confirm="确定要同意提现吗？" data-action="{:url('agree')}" data-value="id#{$vo.id}" data-csrf="{:systoken('agree')}">手动同意</a>
+                        {else}
+                            <a data-tips-text="您没有同意的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">同意</a>
+                        {/if}
+                    {else}
+                        {if auth("agree")}
+                        <a class="layui-btn layui-btn layui-btn-xs" data-confirm="确定要同意提现吗？" data-action="{:url('agree')}" data-value="id#{$vo.id}" data-csrf="{:systoken('agree')}">手动同意</a>
+                        {else}
+                            <a data-tips-text="您没有同意的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">同意</a>
+                        {/if}
+                    {/if}
+                    {if auth("refuse")}
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-confirm="确定要拒绝提现吗？" data-action="{:url('refuse')}" data-value="id#{$vo.id}" data-csrf="{:systoken('refuse')}">拒绝</a>
+                    {else}
+                        <a data-tips-text="您没有拒绝的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">拒绝</a>
+                    {/if}
+                {else}
+                    {if auth("remove")}
+                    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除数据吗?" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删除</a>
+                    {else}
+                    <a data-tips-text="您没有删除的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">删除</a>
+                    {/if}
+                {/if}
+            </td>
+
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

@@ -1,0 +1,63 @@
+{extend name='admin@main'}
+{block name="content"}
+
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off" >
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">地址</span>
+                <input name="host" class="layui-input" placeholder="请输入地址" value="{$vo.host|default=''}" readonly>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">端口号</span>
+                <input name="port" class="layui-input" placeholder="请输入端口号" value="{$vo.port|default=''}" readonly>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">登录认证方式</span>
+                <input name="smtp" class="layui-input" placeholder="请输入登录认证方式" value="{$vo.smtp|default=''}" readonly>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">编码方式</span>
+                <input name="charset" class="layui-input" placeholder="请输入编码方式" value="{$vo.charset|default=''}" readonly>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">发件人昵称</span>
+                <input name="nickname" class="layui-input" placeholder="请输入发件人昵称" value="点击编辑查看" readonly>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">SMTP 登录账号</span>
+                <input name="username" class="layui-input" placeholder="请输入SMTP 登录账号" value="点击编辑查看" readonly>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">SMTP 登录密码</span>
+                <input name="password" class="layui-input" placeholder="请输入SMTP 登录密码" value="点击编辑查看" readonly>
+            </label>
+        </div>
+        <div class="layui-form-item text-left">
+            163邮箱：地址->smtp.163.com，端口号->465，认证方式->ssl，编码方式->UTF-8，发件人昵称->自定义，SMTP 登录账号->你的邮箱，SMTP 登录密码->smtp密码
+            <br>
+            outlook邮箱：地址->smtp-mail.outlook.com，端口号->587，认证方式->TLS，编码方式->UTF-8，发件人昵称->自定义，SMTP 登录账号->你的邮箱，SMTP 登录密码->邮箱密码
+            <br>
+            gmail邮箱：地址->smtp.gmail.com，端口号->465，认证方式->ssl，编码方式->UTF-8，发件人昵称->自定义，SMTP 登录账号->你的邮箱，SMTP 登录密码->专用密码
+            <br>
+            （谷歌邮箱，需开启POP、IMAP，两步验证，设置专用密码，SMTP密码为专用密码）
+            <br>
+            具体自行百度
+        </div>
+        <div class="layui-form-item text-center">
+        {if auth("email_edit")}
+            <a class="layui-btn" data-modal='{:url("email_edit")}?id={$vo.id}'>编 辑</a>
+        {else}
+        <a data-tips-text="您没有编辑的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">编 辑</a>
+        {/if}
+        </div>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

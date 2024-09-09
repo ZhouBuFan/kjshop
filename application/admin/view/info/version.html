@@ -1,0 +1,46 @@
+{extend name='admin@main'}
+{block name="content"}
+
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off" >
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">APP名称</span>
+                <input name="app_name" class="layui-input" placeholder="请输入APP名称" value="{$vo.app_name|default=''}" readonly>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">下载地址</span>
+                <input name="down_url" class="layui-input" placeholder="请输入下载地址" value="{$vo.down_url|default=''}" readonly>
+            </label>
+            <label class="layui-col-xs4 relative" >
+                <span class="color-green">是否开启</span>
+                {if $vo.show == 1}
+                    <input class="layui-input" placeholder="" value="开启" readonly>
+                {else}
+                    <input class="layui-input" placeholder="" value="关闭" readonly>
+                {/if}
+            </label>
+            
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">APP图标</span>
+                <br>
+                <img data-tips-image style="height:80px" src="{$vo.app_logo|default=''}" class="margin-right-5 text-top">
+            </label>
+        </div>
+        <div class="layui-form-item text-center">
+        {if auth("version_edit")}
+            <a class="layui-btn" data-modal='{:url("version_edit")}?id={$vo.id}'>编 辑</a>
+        {else}
+        <a data-tips-text="您没有编辑的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">编 辑</a>
+        {/if}
+        </div>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

@@ -1,0 +1,91 @@
+<fieldset>
+    <legend>条件搜索</legend>
+    <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">用户账号</label>
+            <div class="layui-input-inline">
+                <input name="u_username" value="{$Think.get.u_username|default=''}" placeholder="请输入用户账号" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">提交日期（实际时间）</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="i_time" value="{$Think.get.i_time|default=''}" placeholder="请选择提交时间" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">后台账户</label></label>
+            <div class="layui-input-inline">
+                <input name="sys_username" value="{$Think.get.sys_username|default=''}" placeholder=请输入后台账户" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">上级邀请人</label>
+            <div class="layui-input-inline">
+                <input  name="superior_username" value="{$Think.get.superior_username|default=''}" placeholder="请输入上级邀请人" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">提现金额</label>
+            <div class="layui-input-inline">
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" name="recharge_amount" value="{$Think.get.recharge_amount|default=''}" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid">-</div>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" name="recharge_amount_1" value="{$Think.get.recharge_amount_1|default=''}" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">订单号</label>
+            <div class="layui-input-inline">
+                <input name="order_no" value="{$Think.get.order_no|default=''}" placeholder="请输入订单号" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">流水号</label>
+            <div class="layui-input-inline">
+                <input name="serial_number" value="{$Think.get.serial_number|default=''}" placeholder="请输入订单号" class="layui-input">
+            </div>
+        </div>
+        <!-- <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">代理线</label>
+            <div class="layui-input-inline">
+                <input name="u_agent" value="{$Think.get.u_agent|default=''}" placeholder="请输入代理线" class="layui-input">
+            </div>
+        </div> -->
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">代付类型</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="type">
+                    {foreach [''=>'- 全部 -','1'=>'onepay','2'=>'jmpay','3'=>'xlpay'] as $k=>$v}
+                    <!--{eq name='Think.get.type' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">处理进度</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="i_status">
+                    {foreach [''=>'- 全部进度 -','0'=>'待审核','1'=>'已完成','2'=>'已拒绝','4'=>'代付中'] as $k=>$v}
+                    <!--{eq name='Think.get.i_status' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        </div>
+    </form>
+    <script>form.render()</script>
+</fieldset>

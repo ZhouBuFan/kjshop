@@ -1,0 +1,103 @@
+{extend name='admin@main'}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='invest/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-left nowrap'>投资产品id</th>
+            <th class='text-left nowrap'>投资信息</th>
+            <th class='text-left nowrap'>所属</th>
+            <th class='text-left nowrap'>投资数据</th>
+            <th class='text-left nowrap'>投资状态</th>
+            <th class='text-left nowrap'>购买类型</th>
+            <th class="text-left nowrap">投资时间</th>
+            <th class="text-left nowrap">操作</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-left' style="max-width: 260px;overflow: hidden">
+                投资产品id：{$vo.itemid|default='--'}<br>
+                
+            </td>
+            <td class='text-left' style="max-width: 260px;overflow: hidden">
+                项目名称：{$vo.title|default='--'}<br>
+                投资人：{$vo.username|default='--'}<br>
+                
+            </td>
+            <td>
+                所属业务员：{$vo.s_name|default='--'} <br>
+                我的上级：{$vo.top|default='--'} <br>
+            </td>
+            <td class='text-left nowrap'>
+                金额：${$vo.money|number_format=2}<br>
+                
+                利率：{$vo.rate|default='--'} %<br>
+                周期：{$vo.day|default='--'} 
+                {if $vo.type==1}
+                    天
+                {elseif $vo.type==2}
+                    天
+                {elseif $vo.type==3}
+                    小时
+                {/if}
+                <br>
+                类型：
+                {if $vo.type==1}
+                    每日付息到期还本
+                {elseif $vo.type==2}
+                    到期还本付息（日）
+                {elseif $vo.type==3}
+                    到期还本付息（时）
+                {elseif $vo.type==4}
+                    按日返息 到期不反本（日）
+                {/if}<br>
+            </td>
+            <td class='text-left nowrap'>
+                状态：
+                {eq name='vo.status' value='0'}<span class="color-green">进行中</span>{/eq}
+                {eq name='vo.status' value='1'}<span class="color-desc">已结束</span>{/eq}
+                <br>
+                总期数：{$vo.total_num|default='--'}（剩余：{$vo.wait_num|default='--'}）
+                <br>
+                总利息：${$vo.total_interest|number_format=2} （剩余：${$vo.wait_interest|number_format=2} ）
+                <br>
+            </td>
+             <td class='text-left nowrap'>
+                
+               {if $vo.is_withdrawal_purchase==0}
+                     充值钱包
+                 {elseif $vo.is_withdrawal_purchase==1}
+                     余额钱包
+                 {/if}
+               
+            </td>
+            <td class='text-left nowrap'>
+                投资时间：{$vo.time|default='--'}<br>
+                实际投资：{$vo.time_actual|default='--'}<br>
+                到期时间：{$vo.time2|default='--'}<br>
+                实际到期：{$vo.time2_actual|default='--'}<br>
+                时区：{$vo.time_zone|default='--'}
+            </td>
+            <td>
+                {if auth("admin/invest/set_pause") and $vo.status == 0}
+                    {if $vo.pause_time > 0}
+                        <a class="layui-btn layui-btn-sm layui-btn-normal" data-confirm="确定要开启项目吗?" data-action="{:url('set_pause')}" data-value="id#{$vo.id}" data-csrf="{:systoken('set_pause')}">开启</a>
+                    {else}
+                        <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要暂停项目吗?" data-action="{:url('set_pause')}" data-value="id#{$vo.id}" data-csrf="{:systoken('set_pause')}">暂停</a>
+                    {/if}
+                {/if}
+                
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

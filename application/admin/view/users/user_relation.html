@@ -1,0 +1,42 @@
+{extend name='admin@main'}
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='users/relation_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class="text-left nowrap">用户信息</th>
+            <th class="text-left nowrap">级别</th>
+            <!-- <th class="text-left nowrap">推广情况</th> -->
+            <th class="text-left nowrap">注册时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-left nowrap'>
+                用户名：{$vo.username|default='--'}<br>
+                直接上级：{$vo.top|default='--'}<br>
+                管理员上级：{$vo.s_name|default='--'}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.level|default='--'}级
+            </td>
+            <!-- <td class='text-left nowrap'>
+                直接下级：{$vo.team_direct_count}（人）<br>
+                间接下级：{$vo.team_indirect_count}（人）<br>
+            </td> -->
+            <td class='text-left nowrap'>
+                注册时间：{$vo.time}<br>
+                实际时间：{$vo.act_time}<br>
+                注册时区：{$vo.time_zone}
+            </td>
+        </tr>
+        {/foreach}
+        {/notempty}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

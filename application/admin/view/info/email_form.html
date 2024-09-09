@@ -1,0 +1,49 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">地址</span>
+                <input name="host" class="layui-input" placeholder="请输入地址" value="{$vo.host|default=''}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">端口号</span>
+                <input name="port" class="layui-input" placeholder="请输入端口号" value="{$vo.port|default=''}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">登录认证方式</span>
+                <input name="smtp" class="layui-input" placeholder="请输入登录认证方式" value="{$vo.smtp|default=''}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">编码方式</span>
+                <input name="charset" class="layui-input" placeholder="请输入编码方式" value="{$vo.charset|default=''}" required>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">发件人昵称</span>
+                <input name="nickname" class="layui-input" placeholder="请输入发件人昵称" value="{$vo.nickname|default=''}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">SMTP 登录账号</span>
+                <input name="username" class="layui-input" placeholder="请输入SMTP 登录账号" value="{$vo.username|default=''}" required>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">SMTP 登录密码</span>
+                <input name="password" class="layui-input" placeholder="请输入SMTP 登录密码" value="{$vo.password|default=''}" required>
+            </label>
+        </div>
+
+        <div class="layui-form-item text-center">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn" type="submit">保存设置</button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

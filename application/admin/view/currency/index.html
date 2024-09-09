@@ -1,0 +1,81 @@
+{extend name='admin@main'}
+
+{block name="button"}
+    <button data-modal='{:url("api")}?id=1' data-title="汇率API" class='layui-btn layui-btn-sm layui-btn-primary'>编辑汇率API</button>
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+        
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-sort-td'>
+                <button type="button" data-reload class="layui-btn layui-btn-xs">刷 新</button>
+            </th>
+            <th class='text-left'>语言/货币</th>
+            <th class='text-left'>时区</th>
+            <th class='text-left'>汇率</th>
+            <th class='text-left'>前端显示精度（小数点）</th>
+            <th class='text-left'>充值/提现</th>
+            <th class='text-left'>常用充值金额</th>
+            <th class='text-left'>显示/隐藏</th>
+            <th class="text-left"></th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='list-table-sort-td'>
+                <input data-action-blur="{:request()->url()}" data-value="id#{$vo.id};action#sort;sort#{value}" data-loading="false" value="{$vo.sort}" class="list-sort-input">
+            </td>
+            <td class='text-left'>
+                {$vo.country_cn|default=''} / {$vo.name|default=''}
+            </td>
+            <td class='text-left'>
+                {$vo.time_zone|default=''}
+            </td>
+            <td class='text-left'>
+                $1 ≈ {$vo.price|default=''}
+            </td>
+            <td class='text-left'>
+                {$vo.precision|default=''}
+            </td>
+            <td class='text-left'>
+                每日提现次数：{$vo.withdraw_num|default=''}<br>
+                最低提现金额：${$vo.withdraw_min|default=''}<br>
+                最低充值金额：${$vo.recharge_min|default=''}
+            </td>
+            <td class='text-left'>
+                ${$vo.common_money|default=''}
+            </td>
+            <td class='text-left nowrap'>
+                {eq name='vo.show' value='1'}
+                <span class="color-green">显示</span>
+                {else}
+                <span class="color-red">隐藏</span>
+                {/eq}
+            </td>
+            <td class='text-left'>
+                {if auth("edit")}
+                    <a data-title="编辑" class="layui-btn layui-btn-sm" data-modal='{:url("edit")}?id={$vo.id}'>编 辑</a>
+                {else}
+                    <a data-tips-text="您没有的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">编 辑</a>
+                {/if}
+                {if $vo.show eq 0 and auth("hidden")}
+                <a class="layui-btn layui-btn-sm layui-btn-warm" data-action="{:url('show')}" data-value="id#{$vo.id}" data-csrf="{:systoken('show')}">显 示</a>
+                {elseif $vo.show eq 1 and auth("show")}
+                <a class="layui-btn layui-btn-sm layui-btn-danger" data-action="{:url('hidden')}" data-value="id#{$vo.id}" data-csrf="{:systoken('hidden')}">隐 藏</a>
+                {else}
+                    <a data-tips-text="您没显示隐藏的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">显示/隐藏</a>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

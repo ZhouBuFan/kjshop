@@ -1,0 +1,55 @@
+<fieldset>
+    <legend>条件搜索</legend>
+    <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">用户账号</label>
+            <div class="layui-input-inline">
+                <input name="u_username" value="{$Think.get.u_username|default=''}" placeholder="请输入用户账号" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">流水时间（实际时间）</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="i_time" value="{$Think.get.i_time|default=''}" placeholder="请选择流水时间" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">后台账户</label>
+            <div class="layui-input-inline">
+                <input name="sys_username" value="{$Think.get.sys_username|default=''}" placeholder="请输入后台账户" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">转入转出</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="i_type">
+                    {foreach [''=>'- 全部 -','1'=>'收入','2'=>'支出'] as $k=>$v}
+                    <!--{eq name='Think.get.i_type' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">账单类型</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="i_fund_type">
+                    {foreach [''=>'- 全部账单 -','1'=>'系统操作','2'=>'充值','3'=>'提现','4'=>'提现失败','5'=>'投资项目','6'=>'投资收益','15'=>'投资本金返还','7'=>'注册赠送','8'=>'邀请好友','9'=>'认证赠送','10'=>'登录赠送','11'=>'投资赠送','12'=>'直属充值奖励','13'=>'间属充值奖励','14'=>'幸运抽奖','16'=>'储蓄金-申购','17'=>'储蓄金-赎回','18'=>'储蓄金-收益','19'=>'团队佣金','20'=>'红包'] as $k=>$v}
+                    <!--{eq name='Think.get.i_fund_type' value='$k.""'}-->
+                    <option selected value="{$k}">{$v}</option>
+                    <!--{else}-->
+                    <option value="{$k}">{$v}</option>
+                    <!--{/eq}-->
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        </div>
+    </form>
+    <script>form.render()</script>
+</fieldset>

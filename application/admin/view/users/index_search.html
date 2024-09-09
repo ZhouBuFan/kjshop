@@ -1,0 +1,194 @@
+<fieldset>
+
+    <legend>条件搜索</legend>
+
+    <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get" autocomplete="off">
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">用户账号</label>
+            <div class="layui-input-inline">
+                <input name="u_username" value="{$Think.get.u_username|default=''}" placeholder="请输入用户账号（模糊查询）" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">IP搜索</label>
+            <div class="layui-input-inline">
+                <input name="u_ip" value="{$Think.get.u_ip|default=''}" placeholder="请输入IP（模糊查询）" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">注册时间</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="u_time" value="{$Think.get.u_time|default=''}" placeholder="请选择注册时间（系统时区）" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">最近操作时间时间</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="u_logintime" value="{$Think.get.u_logintime|default=''}" placeholder="请选择注册时间（系统时区）" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">后台账户</label></label>
+            <div class="layui-input-inline">
+                <input name="sys_username" value="{$Think.get.sys_username|default=''}" placeholder=请输入后台账户" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">上级邀请人</label>
+            <div class="layui-input-inline">
+                <input  name="superior_username" value="{$Think.get.superior_username|default=''}" placeholder="请输入上级邀请人" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">VIP等级</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="u_mid">
+                    <option value="">-- 全部状态 --</option>
+                    {foreach $member as $k=>$v}
+                    {eq name='Think.get.u_mid' value='$v.id'}
+                    <option selected value="{$v.id}">{$v.name}</option>
+                    {else}
+                    <option value="{$v.id}">{$v.name}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">充值金额</label>
+            <div class="layui-input-inline">
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" name="recharge_amount" value="{$Think.get.recharge_amount|default=''}" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid">-</div>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" name="recharge_amount_1" value="{$Think.get.recharge_amount_1|default=''}" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">积分</label>
+            <div class="layui-input-inline">
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" name="integral" value="{$Think.get.integral|default=''}" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid">-</div>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" name="integral_1" value="{$Think.get.integral_1|default=''}" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">推广人数</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="promotion_num" value="{$Think.get.promotion_num|default=''}" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="promotion_num_1" value="{$Think.get.promotion_num_1|default=''}" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">有效推广人数</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="effective_promotion_num" value="{$Think.get.effective_promotion_num|default=''}" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="effective_promotion_num_1" value="{$Think.get.effective_promotion_num_1|default=''}" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">充值钱包</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="recharge_wallet" value="{$Think.get.recharge_wallet|default=''}" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="recharge_wallet_1" value="{$Think.get.recharge_wallet_1|default=''}" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">余额钱包</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="balance_wallet" value="{$Think.get.balance_wallet|default=''}" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="balance_wallet_1" value="{$Think.get.balance_wallet_1|default=''}" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">抽奖次数</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="draw_num" value="{$Think.get.draw_num|default=''}" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="draw_num_1" value="{$Think.get.draw_num_1|default=''}" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">结余</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="surplus_amount" value="{$Think.get.surplus_amount|default=''}" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="surplus_amount_1" value="{$Think.get.surplus_amount_1|default=''}" placeholder="" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <!-- <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">邮箱认证</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="u_auth_email">
+                    {foreach [''=>'-- 全部状态 --','0'=>'未认证','1'=>'已认证'] as $k=>$v}
+                    {eq name='Think.get.u_auth_email' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div> -->
+        <!-- <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">谷歌认证</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="u_auth_google">
+                    {foreach [''=>'-- 全部状态 --','0'=>'未认证','1'=>'已认证'] as $k=>$v}
+                    {eq name='Think.get.u_auth_google' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div> -->
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">是否冻结</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="u_clock">
+                    {foreach [''=>'-- 全部状态 --','1'=>'已冻结','0'=>'未冻结'] as $k=>$v}
+                    {eq name='Think.get.u_clock' value='$k.""'}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        </div>
+    </form>
+
+</fieldset>
+
+<script>form.render()</script>

@@ -1,0 +1,121 @@
+{extend name='admin@main'}
+{block name="button"}
+{if auth("admin/merchant/add")}
+<!--<button data-modal='{:url("add")}' data-title="添加优盾钱包" class='layui-btn layui-btn-sm layui-btn-primary'>添加优盾钱包</button>-->
+{/if}
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <input data-auto-none data-check-target='.list-check-box' type='checkbox'>
+            </th>
+            <!--<th class='text-left'>商户号</th>-->
+            <!--<th class="text-left">APP秘钥</th>-->
+            <th class="text-left">请求网关地址</th>
+            <!--<th class="text-left">回调地址</th>-->
+            <th class="text-left">主币种编号</th>
+            <th class="text-left">子币种编号</th>
+            <th class="text-left">自动/手动代付</th>
+            <th class="text-left">自动/手动审核</th>
+            <th class="text-left">自动代付金额</th>
+            <th class="text-left nowrap"></th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='list-table-check-td think-checkbox'>
+                <input class="list-check-box" value='{$vo.id}' type='checkbox'>
+            </td>
+            <!--<td class='text-left'>-->
+            <!--    {$vo.mer_num|default=''}-->
+            <!--</td>-->
+            <!--<td class='text-left'>-->
+            <!--    {$vo.api_key|default=''}-->
+            <!--</td>-->
+            <td class='text-left'>
+                {$vo.gate_add|default=''}
+            </td>
+            <!--<td class='text-left'>-->
+            <!--    {$vo.call_url|default=''}-->
+            <!--</td>-->
+            <td class='text-left'>
+                {$vo.main_coin_type|default=''}
+            </td>
+            <td class='text-left'>
+                {$vo.coin_type|default=''}
+            </td>
+            <td class='text-left '>
+                当前状态：
+                {eq name='vo.auto' value='1'}
+                <span class="color-blue">自动</span>
+                <br><br>
+                操作步骤：<br>
+                优盾钱包有开启自动审核，则无需任何操作<br>
+                优盾钱包未开启自动审核，需在优盾钱包手动审核
+                {else}
+                <span class="color-red">手动</span>
+                <br><br>
+                操作步骤：<br>
+                提现记录点击优盾代付->优盾钱包点击审核通过<br>
+                {/eq}
+            </td>
+            <td class='text-left '>
+                当前状态：
+                {eq name='vo.auto_audit' value='1'}
+                <span class="color-blue">自动</span>
+                {else}
+                <span class="color-red">手动</span>
+                {/eq}
+                <br><br>
+                优盾钱包需开启自动审核才可使用<br>
+                需配合自动代付使用<br>
+            </td>
+            <td class='text-left'>
+                {$vo.df_money|default=''}<br><br>
+                需开启自动代付
+            </td>
+            <td class='text-left nowrap'>
+                {if auth("edit")}
+                <a data-title="编辑优盾钱包" class="layui-btn layui-btn-sm" data-modal='{:url("edit")}?id={$vo.id}'>编 辑</a>
+                {else}
+                    <a data-tips-text="您没编辑的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">编 辑</a>
+                {/if}
+                {if $vo.auto eq 0 and auth("auto1")}
+                    <a class="layui-btn layui-btn-sm layui-btn-normal" data-action="{:url('auto1')}" data-value="id#{$vo.id}" data-csrf="{:systoken('auto1')}">自动代付</a>
+                {elseif $vo.auto eq 1 and auth("auto0")}
+                    <a class="layui-btn layui-btn-sm layui-btn-warm" data-action="{:url('auto0')}" data-value="id#{$vo.id}" data-csrf="{:systoken('auto0')}">手动代付</a>
+                {else}
+                    <a data-tips-text="您没手动/自动代付的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">手动/自动代付</a>
+                {/if}
+                
+                {if $vo.auto_audit eq 0 and auth("auto_audit1")}
+                    <a class="layui-btn layui-btn-sm layui-btn-normal" data-action="{:url('auto_audit1')}" data-value="id#{$vo.id}" data-csrf="{:systoken('auto_audit1')}">自动审核</a>
+                {elseif $vo.auto_audit eq 1 and auth("auto_audit0")}
+                    <a class="layui-btn layui-btn-sm layui-btn-warm" data-action="{:url('auto_audit0')}" data-value="id#{$vo.id}" data-csrf="{:systoken('auto_audit0')}">手动审核</a>
+                {else}
+                    <a data-tips-text="您没手动/自动审核的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">手动/自动审核</a>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+    <br><br><br><br>
+    <div>优盾官网：https://www.uduncloud.com/   </div><br>
+    <div>免费版： 地址数量100个，代付自动审核不可用，免费周期2个月</div><br>
+    <div>标准A： 地址数量2000个，价格450U/月，代付可自动审核</div><br>
+    <div>标准B： 地址数量8000个，价格1350U/月，代付可自动审核</div><br>
+    <div>标准C： 地址数量16000个，价格230U/月，代付可自动审核</div><br>
+    <div>标准D： 地址数量30000个，价格3400U/月，代付可自动审核</div><br><br>
+    <div>优盾不是我的，我也不会从中赚一分钱，用不用自己选择。</div><br>
+    <div>需要使用的话，充值方式如果主要为HASH提交的话，标准A就够用；如果需要使用免提交充值的话，会消耗地址，根据实际情况升级</div><br>
+</div>
+{/block}

@@ -1,0 +1,155 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">活期-利率</span>
+                <input name="flexible_rate" class="layui-input" placeholder="请输入活期利率" value="{$vo.flexible_rate|default='0'}" required>
+            </label>
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">活期-最低购买金额</span>
+                <input name="flexible_min" class="layui-input" placeholder="请输入活期最低购买金额" value="{$vo.flexible_min|default='0'}" required>
+            </label>
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">活期-最低持有天数</span>
+                <input name="flexible_min_day" class="layui-input" placeholder="请输入活期-最低持有天数" value="{$vo.flexible_min_day|default='0'}" required>
+            </label>
+        </div>
+        <!--<div class="layui-form-item layui-row layui-col-space15">-->
+        <!--    <label class="layui-col-xs2 relative">-->
+        <!--        <span class="color-green">定期-利率</span>-->
+        <!--        <input name="fixed_rate" class="layui-input" placeholder="请输入定期利率" value="{$vo.fixed_rate|default='0'}" required>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs2 relative">-->
+        <!--        <span class="color-green">定期-最低购买金额</span>-->
+        <!--        <input name="fixed_min" class="layui-input" placeholder="请输入定期最低购买金额" value="{$vo.fixed_min|default='0'}" required>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs2 relative">-->
+        <!--        <span class="color-green">定期-基础天数</span>-->
+        <!--        <input name="fixed_min_day" class="layui-input" placeholder="请输入定期基础天数" value="{$vo.fixed_min_day|default='0'}" required>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs2 relative">-->
+        <!--        <span class="color-green">定期-利率增加量</span>-->
+        <!--        <input name="fixed_inc_rate" class="layui-input" placeholder="请输入定期利率增加量" value="{$vo.fixed_inc_rate|default='0'}" required>-->
+        <!--    </label>-->
+        <!--    <label class="layui-col-xs2 relative">-->
+        <!--        <span class="color-green">定期-最大利率</span>-->
+        <!--        <input name="fixed_rate_max" class="layui-input" placeholder="请输入定期最大利率" value="{$vo.fixed_rate_max|default='0'}" required>-->
+        <!--    </label>-->
+        <!--</div>-->
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs2 relative">
+                <span class="color-green">最低收益金额</span>
+                <input name="min_income" class="layui-input" placeholder="请输入最低收益金额" value="{$vo.min_income|default='0'}" required>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">储蓄金介绍（简体）</span>
+                <textarea name="content_zh_cn">{$vo.content_zh_cn|default='简体'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green label-required-prev">储蓄金介绍（繁体）</span>
+                <textarea name="content_zh_hk">{$vo.content_zh_hk|default='繁体'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">储蓄金介绍（英文）</span>
+                <textarea name="content_en_us">{$vo.content_en_us|default='英文'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">储蓄金介绍（泰语）</span>
+                <textarea name="content_th_th">{$vo.content_th_th|default='泰语'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">储蓄金介绍（越南）</span>
+                <textarea name="content_vi_vn">{$vo.content_vi_vn|default='越南'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">储蓄金介绍（日语）</span>
+                <textarea name="content_ja_jp">{$vo.content_ja_jp|default='日语'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">储蓄金介绍（韩语）</span>
+                <textarea name="content_ko_kr">{$vo.content_ko_kr|default='韩语'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 ">
+                <span class="color-green label-required-prev">储蓄金介绍（马来）</span>
+                <textarea name="content_ms_my">{$vo.content_ms_my|default='马来'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">储蓄金介绍（葡萄牙）</span>
+                <textarea name="content_pt_pt">{$vo.content_pt_pt|default='葡萄牙'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">储蓄金介绍（西班牙）</span>
+                <textarea name="content_es_es">{$vo.content_es_es|default='西班牙'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">储蓄金介绍（土耳其）</span>
+                <textarea name="content_tr_tr">{$vo.content_tr_tr|default='土耳其'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">储蓄金介绍（印尼）</span>
+                <textarea name="content_id_id">{$vo.content_id_id|default='印尼'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">储蓄金介绍（德语）</span>
+                <textarea name="content_de_de">{$vo.content_de_de|default='德语'|raw}</textarea>
+            </label>
+            <label class="layui-col-xs6 relative">
+                <span class="color-green">储蓄金介绍（法语）</span>
+                <textarea name="content_fr_fr">{$vo.content_fr_fr|default='法语'|raw}</textarea>
+            </label>
+        </div>
+        <div class="layui-form-item text-left">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn" type="submit">保存设置</button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+    require(['ckeditor', 'angular'], function () {
+        window.createEditor('[name="content_zh_cn"]', {height: 100});
+        window.createEditor('[name="content_zh_hk"]', {height: 100});
+        window.createEditor('[name="content_en_us"]', {height: 100});
+        window.createEditor('[name="content_th_th"]', {height: 100});
+        window.createEditor('[name="content_vi_vn"]', {height: 100});
+        window.createEditor('[name="content_ja_jp"]', {height: 100});
+        window.createEditor('[name="content_ko_kr"]', {height: 100});
+        window.createEditor('[name="content_ms_my"]', {height: 100});
+        window.createEditor('[name="content_pt_pt"]', {height: 100});
+        window.createEditor('[name="content_es_es"]', {height: 100});
+        window.createEditor('[name="content_tr_tr"]', {height: 100});
+        window.createEditor('[name="content_id_id"]', {height: 100});
+        window.createEditor('[name="content_de_de"]', {height: 100});
+        window.createEditor('[name="content_fr_fr"]', {height: 100});
+        var app = angular.module("GoodsForm", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback($rootScope) {
+            $rootScope.hsitoryBack = function () {
+                $.msg.confirm('确定要取消编辑吗？', function (index) {
+                    history.back(), $.msg.close(index);
+                });
+            };
+        }
+
+    })
+</script>
+{/block}

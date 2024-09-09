@@ -1,0 +1,102 @@
+{extend name='admin@main'}
+{block name="button"}
+{/block}
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='downstream_report/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='text-left'>ID</th>
+            <th class='text-left'>账号</th>
+            <th class="text-left">总人数</th>
+            <th class="text-left">有效用户人数</th>
+            <th class="text-left">今日订单分红</th>
+            <th class="text-left">今日注册人数</th>
+            <th class="text-left">今日首充人数</th>
+            <th class="text-left">今日充值</th>
+            <th class="text-left">兑换红包</th>
+            <th class="text-left">总充值金额</th>
+            <th class="text-left">总提现金额</th>
+            <th class="text-left">总提现次数</th>
+            <th class="text-left">今日提现数量</th>
+            <th class="text-left">提现待处理</th></th>
+            <th class="text-left">总结余</th>
+            <th class="text-left">总余额钱包</th>
+            <th class="text-left">波比</th>
+            <th class="text-left">下线详情</th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='list-table-check-td think-checkbox'>
+                {$vo.id}
+            </td>
+            <td class='text-left'>
+                {$vo.username}
+            </td>
+            <td class='text-left'>
+                {$vo.total_people|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.valid_user|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.invest_reward|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.reg_num|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.today_first_charge|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.today_price|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.residue_num|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.recharge_sum|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.withdraw_sum|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.withdraw_count|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.today_withdraw_count|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.wait_withdraw_count|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.aggregate_balance|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.total_balance|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.poby|default='--'}
+            </td>
+            <td class='text-left'>
+                <i data-modal='{:url("/admin/index/main")}?system_user_id={$vo.id}' data-title="下线详情" class="layui-icon layui-icon-template-1"></i>
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+<style>
+    .layui-layer-page {
+        width: 100% !important;
+        left: unset !important;
+    }
+</style>
+{/block}
+

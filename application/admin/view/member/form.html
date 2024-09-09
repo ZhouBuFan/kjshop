@@ -1,0 +1,81 @@
+<form onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+
+    <div class="layui-card-body">
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">等级名称</label>
+            <label class="layui-col-xs10">
+                <input name="name" required value='{$vo.name|default=""}' placeholder="请输入等级名称" class="layui-input">
+            </label>
+        </div>
+        <!-- <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">累计充值金额</label>
+            <label class="layui-col-xs10">
+                <input name="value" required value='{$vo.value|default="0"}' placeholder="请输入累计充值金额" class="layui-input">
+            </label>
+        </div> -->
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">每日投资次数</label>
+            <label class="layui-col-xs10">
+                <input name="invest_num" required value='{$vo.invest_num|default="0"}' placeholder="请输入每日投资次数" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">直推充值奖励（%）</label>
+            <label class="layui-col-xs10">
+                <input name="rewards_direct" required value='{$vo.rewards_direct|default="0"}' placeholder="请输入直推充值奖励（%）" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">间推充值奖励（%）</label>
+            <label class="layui-col-xs10">
+                <input name="rewards_undirect" required value='{$vo.rewards_undirect|default="0"}' placeholder="请输入间推充值奖励（%）" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">分销等级 B（%）</label>
+            <label class="layui-col-xs10">
+                <input name="level_b" required value='{$vo.level_b|default="0"}' placeholder="请输入level B奖励（%）" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">分销等级 C%）</label>
+            <label class="layui-col-xs10">
+                <input name="level_c" required value='{$vo.level_c|default="0"}' placeholder="请输入level C奖励（%）" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">分销等级 D（%）</label>
+            <label class="layui-col-xs10">
+                <input name="level_d" required value='{$vo.level_d|default="0"}' placeholder="请输入level D奖励（%）" class="layui-input">
+            </label>
+        </div>
+        <div class="layui-row margin-bottom-15">
+            <label class="layui-col-xs2 think-form-label">LOGO</label>
+            <label class="layui-col-xs10">
+                <table class="layui-table">
+                <thead>
+                <tr>
+                    <td width="150px" class="text-center">
+                        <input name="logo" type="hidden" value="{$vo.logo|default=''}">
+                    </td>
+                </tr>
+                </thead>
+            </table>
+            <script>$('[name="logo"]').uploadOneImage()</script>
+            </label>
+            
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

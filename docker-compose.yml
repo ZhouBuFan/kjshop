@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  phpfpm:
+    image: bitnami/php-fpm:7.2.34
+    volumes:
+      - ./:/app
+      - ./php.ini:/opt/bitnami/php/etc/conf.d/custom.ini
+      - ./redis.so:/opt/bitnami/php/lib/php/extensions/redis.so
+  nginx:
+    image: 'bitnami/nginx:latest'
+    depends_on:
+      - phpfpm
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx.conf:/opt/bitnami/nginx/conf/server_blocks/app.conf
+      - ./:/app
+  redis:
+    image: bitnami/redis
+     # 重启策略
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - redis_data:/bitnami/redis/data
+volumes:
+  redis_data:
+  

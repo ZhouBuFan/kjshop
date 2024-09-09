@@ -1,0 +1,48 @@
+<form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">用户账号</span>
+                <input name="username" class="layui-input" required placeholder="请输入用户账号" value="{$vo.username|default=''}">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">登录密码</span>
+                <input name="password" class="layui-input" required placeholder="请输入登录密码" value="">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">推荐人</span>
+                <input name="top_user" class="layui-input" placeholder="请输入推荐人账号" value="">
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">注册时区</span>
+                <select name='time_zone' required class='layui-select' lay-search>
+                    {foreach $currencies as $key=>$currency}
+                    {eq name='currency.time_zone' value='$vo.time_zone|default=0'}
+                    <option selected value='{$currency.time_zone}'>{$currency.time_zone}</option>
+                    {else}
+                    <option value='{$currency.time_zone}'>{$currency.time_zone}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            
+            
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+</form>
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

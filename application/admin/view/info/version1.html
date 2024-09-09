@@ -1,0 +1,45 @@
+{extend name='admin@main'}
+{block name="content"}
+<form onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">APP名称</span>
+                <input name="app_name" class="layui-input" placeholder="" value="{$vo.app_name|default='0'}" required>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green">下载地址</span>
+                <input name="down_url" class="layui-input" placeholder="https://" value="{$vo.down_url|default='0'}" required>
+            </label>
+            <label class="layui-col-xs4 relative">
+                <span class="color-green label-required-prev">APP图标</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th class="text-center"></th>
+                </tr>
+                <tr>
+                    <td width="150px" class="text-center">
+                        <input name="app_logo" type="hidden" value="{$vo.app_logo|default=''}">
+                    </td>
+                </tr>
+                </thead>
+            </table>
+            <script>$('[name="app_logo"]').uploadOneImage()</script>
+            </label>
+        </div>
+        <div class="layui-form-item layui-row layui-col-space15">
+            
+        </div>
+        <div class="layui-form-item text-left">
+            {notempty name='vo.id'}<input type="hidden" name="id" value="{$vo.id}">{/notempty}
+            <button class="layui-btn" type="submit">保存设置</button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}

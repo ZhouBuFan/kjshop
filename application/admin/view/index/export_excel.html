@@ -1,0 +1,29 @@
+{extend name='admin@main'}
+{block name="content"}
+<style>
+    .layui-form-checkbox i{
+        border: 1px solid #d2d2d2;
+    }
+</style>
+<!--<form  action="/admin.html#/admin/index/export_save" onsubmit="return false;"  data-auto="true" method="post" class='layui-form layui-card' autocomplete="off">-->
+    <div class="think-box-shadow padding-40">
+        <div class="layui-form-item layui-row layui-col-space15">
+            <label class="layui-col-xs12 relative">
+                <span class="color-green">时间范围（实际时间）</span>
+                <input data-date-range name="i_time" value="{$Think.get.i_time|default=''}" placeholder="请选择时间范围" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-form-item text-center">
+            <a href="/admin.html#/admin/index/export_save">
+                <button class="layui-btn" type="submit">确定</button>
+            </a>
+        </div>
+    </div>
+<!--</form>-->
+{/block}
+{block name='script'}
+<script>
+    window.form.render();
+</script>
+{/block}
