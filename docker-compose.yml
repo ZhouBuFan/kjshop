@@ -11,8 +11,7 @@ services:
     depends_on:
       - phpfpm
     ports:
-      - '80:80'
-      - '443:443'
+      - '127.0.0.1:8083:80'
     volumes:
       - ./nginx.conf:/opt/bitnami/nginx/conf/server_blocks/app.conf
       - ./:/app
@@ -20,7 +19,7 @@ services:
     image: bitnami/redis
      # 重启策略
     restart: always
-    environment:
+    environment :
       - ALLOW_EMPTY_PASSWORD=yes
     volumes:
       - redis_data:/bitnami/redis/data

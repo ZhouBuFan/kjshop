@@ -1703,9 +1703,9 @@ class Request
 
         $httpAgentIp = $this->config['http_agent_ip'];
 
-        if ($httpAgentIp && $this->server($httpAgentIp)) {
-            $ip = $this->server($httpAgentIp);
-        } elseif ($adv) {
+//        if ($httpAgentIp && $this->server($httpAgentIp)) {
+//            $ip = $this->server($httpAgentIp);
+//        } elseif ($adv) {
             if ($this->server('HTTP_X_FORWARDED_FOR')) {
                 $arr = explode(',', $this->server('HTTP_X_FORWARDED_FOR'));
                 $pos = array_search('unknown', $arr);
@@ -1713,14 +1713,15 @@ class Request
                     unset($arr[$pos]);
                 }
                 $ip = trim(current($arr));
-            } elseif ($this->server('HTTP_CLIENT_IP')) {
-                $ip = $this->server('HTTP_CLIENT_IP');
-            } elseif ($this->server('REMOTE_ADDR')) {
-                $ip = $this->server('REMOTE_ADDR');
             }
-        } elseif ($this->server('REMOTE_ADDR')) {
-            $ip = $this->server('REMOTE_ADDR');
-        }
+// elseif ($this->server('HTTP_CLIENT_IP')) {
+//                $ip = $this->server('HTTP_CLIENT_IP');
+//            } elseif ($this->server('REMOTE_ADDR')) {
+//                $ip = $this->server('REMOTE_ADDR');
+//            }
+//        } elseif ($this->server('REMOTE_ADDR')) {
+//            $ip = $this->server('REMOTE_ADDR');
+//        }
 
         // IP地址类型
         $ip_mode = (strpos($ip, ':') === false) ? 'ipv4' : 'ipv6';
