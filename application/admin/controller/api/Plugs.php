@@ -77,6 +77,8 @@ class Plugs extends Controller
         $this->extend = pathinfo($file->getInfo('name'), PATHINFO_EXTENSION);
         $name = File::name($file->getPathname(), $this->extend, '', 'md5_file');
         $info = File::instance($this->uptype)->save($name, file_get_contents($file->getRealPath()), $this->safe);
+        dump(file_get_contents($file->getRealPath()));exit;
+
         if (is_array($info) && isset($info['url'])) {
 //            return json(['uploaded' => true, 'filename' => $name, 'url' => $this->safe ? $name : getInfo("domain_api").$info['url']]);
              return json(['uploaded' => true, 'filename' => $name, 'url' => $this->safe ? $name : $info['url']]);

@@ -44,9 +44,9 @@ class Index extends Controller
         $auth = AdminService::instance()->apply(true);
         if(!$auth->isLogin()) $this->redirect('@admin/login');
         $this->menus = MenuService::instance()->getTree();
-        
+
         $user = $this->app->session->get('user');
-        
+
         if($user['authorize']!=4){
             foreach($this->menus as $k=>$v){
                 if($v['id'] == 69){
@@ -58,7 +58,7 @@ class Index extends Controller
                 }
             }
         }
-        
+
         if (empty($this->menus) && !$auth->isLogin()) {
             $this->redirect('@admin/login');
         } else {
@@ -106,10 +106,10 @@ class Index extends Controller
         //             }
         //             $this->success("<a style='color:#FFFFFF' data-open='/admin/recharge_record/index.html'>您有{$recharge_count}条新的充值记录，请查看！</a>",['url'=>$url]);
         //         }
-                $this->error("暂无记录");
-            
-        
-        
+        $this->error("暂无记录");
+
+
+
     }
 
     /**
@@ -158,8 +158,11 @@ class Index extends Controller
             if ($auth['username'] != 'admin') {
                 $ids = Db::table('system_user_relation')->where('parentid',$auth['id'])->column('uid');
                 $ids[] = $auth['id'];
-                 if($auth['id']==10257){
+                if($auth['id']==10257){
                     $ids[] = 10261;
+                }
+                if($auth['id']==10194){
+                    $ids[]=10193;
                 }
                 $this->users = Db::table('system_user')->alias('su')->join("system_user_relation sur", "sur.uid=su.id")->where('sur.parentid',$auth['id'])->select();
             }else {
@@ -177,11 +180,11 @@ class Index extends Controller
                 $ids = Db::table('system_user_relation')->where('parentid',$system_user_id)->column('uid');
                 $ids[] = $system_user_id;
             }
-            
+
             if ($auth['username'] != 'admin' || ($auth['username'] == 'admin' && $system_user_id)) {
                 //今日注册
                 $user_count_today = Db::name('LcUser')->field('id')->whereIn('system_user_id', $ids)->where("is_real=0 and time>='$today'")->count();
-                $this->user_count_today  =   $user_count_today; 
+                $this->user_count_today  =   $user_count_today;
 
                 //今日首充人数
                 $first_charge_count_today = Db::name('LcUserRechargeRecord')->alias('rr')->join('lc_user u', 'u.id = rr.uid')->field('rr.uid')->whereIn('u.system_user_id', $ids)->where("rr.time>='$today'")->where(['status' => 1,'count' => 1])->count();
@@ -197,18 +200,18 @@ class Index extends Controller
 
                 //提现金额
                 $withdraws= Db::name('LcUserWithdrawRecord')->alias('rr')->join('lc_user u', 'u.id=rr.uid')->whereIn('u.system_user_id', $ids)->where("rr.time2 >='$today' AND rr.status = 1")
-                ->field(['SUM(rr.money)' => 'withdraw1', 'SUM(rr.charge)' => 'withdraw2'])->find();
+                    ->field(['SUM(rr.money)' => 'withdraw1', 'SUM(rr.charge)' => 'withdraw2'])->find();
                 $todaywithdraw = $withdraws['withdraw1'] - $withdraws['withdraw2'];
 
                 //今日投资笔数
                 $invest_count_today = Db::name('LcInvest')->alias('rr')->join('lc_user u', 'u.id=rr.uid')->whereIn('u.system_user_id', $ids)->where("u.is_real = 0")->where("rr.time>='$today'")->count();
-                
+
                 $system_statement = Db::name('LcSystemStatement')->whereIn('system_id', $ids)
-                ->field(['SUM(regis_num)' => 'user_count', 'SUM(frist_topup_num)' => 'recharge_p',
-                'SUM(topup_money)' => 'recharge_sum','SUM(withdraw)'=> 'withdraw_sum','SUM(order_num)'=> 'invest_count',
-                'SUM(order_dividend)'=> 'invest_reward','SUM(red_packet)'=>'residue_num'])
-                ->find();
-                 //用户数量
+                    ->field(['SUM(regis_num)' => 'user_count', 'SUM(frist_topup_num)' => 'recharge_p',
+                             'SUM(topup_money)' => 'recharge_sum','SUM(withdraw)'=> 'withdraw_sum','SUM(order_num)'=> 'invest_count',
+                             'SUM(order_dividend)'=> 'invest_reward','SUM(red_packet)'=>'residue_num'])
+                    ->find();
+                //用户数量
                 $user_count = $system_statement['user_count'];
                 $this->user_count = $user_count_today + $user_count;
                 //用户可提现余额
@@ -217,11 +220,11 @@ class Index extends Controller
                 $this->user_count_yesterday = Db::name('LcSystemStatement')->whereIn('system_id', $ids)->where("time='$yesterday'")->sum('regis_num');
                 //昨日订单笔数
                 $this->invest_count_yesterday = Db::name('LcSystemStatement')->whereIn('system_id', $ids)->where("time='$yesterday'")->sum('order_num');
-                                
+
                 //充值人数
                 $recharge_p = $system_statement['recharge_p'];
                 $this->recharge_p = $recharge_p+$first_charge_count_today;
-                
+
                 //首充人数
                 $this->first_charge_count = $recharge_p;
                 //昨日首充人数
@@ -236,19 +239,19 @@ class Index extends Controller
                 $this->invest_reward  =$system_statement['invest_reward'];
                 // 兑换红包
                 $this->residue_num = $system_statement['residue_num'];
-                
+
                 // 总结余（充值-提现）
                 $this->aggregate_balance = $this->recharge_sum - $this->withdraw_sum;
-                
+
                 // 波比（提现 / 充值）
                 $this->poby = $this->recharge_sum ? bcmul($this->withdraw_sum/$this->recharge_sum, 100, 2) . "%" : '--';
                 // 待处理提现数量
                 $this->wait_withdraw_count = Db::name('LcUserWithdrawRecord')->alias('rr')->join('lc_user u', 'u.id=rr.uid')->whereIn('u.system_user_id', $ids)->where("rr.status = 0")->sum("rr.money");
-            //管理员角色
+                //管理员角色
             }else {
                 //今日注册
                 $user_count_today = Db::name('LcUser')->field('id')->where("is_real = 0 and time>='$today'")->count();
-                $this->user_count_today  =   $user_count_today; 
+                $this->user_count_today  =   $user_count_today;
 
                 //今日首充人数
                 $first_charge_count_today = Db::name('LcUserRechargeRecord')->where("time>='$today'")->where(['status' => 1,'count' => 1])->count();
@@ -262,20 +265,20 @@ class Index extends Controller
                     $recharge = 0;
                 }
 
-                 //提现金额
-                 $withdraws= Db::name('LcUserWithdrawRecord')->alias('rr')->where("rr.time2 >='$today' AND rr.status = 1")
-                 ->field(['SUM(rr.money)' => 'withdraw1', 'SUM(rr.charge)' => 'withdraw2'])->find();
-                 $todaywithdraw = $withdraws['withdraw1'] - $withdraws['withdraw2'];
-                
+                //提现金额
+                $withdraws= Db::name('LcUserWithdrawRecord')->alias('rr')->where("rr.time2 >='$today' AND rr.status = 1")
+                    ->field(['SUM(rr.money)' => 'withdraw1', 'SUM(rr.charge)' => 'withdraw2'])->find();
+                $todaywithdraw = $withdraws['withdraw1'] - $withdraws['withdraw2'];
+
 
                 //今日投资笔数
                 $invest_count_today = Db::name('LcInvest')->where("time>='$today'")->count();
-                
+
                 $system_statement = Db::name('LcSystemStatement')
-                ->field(['SUM(regis_num)' => 'user_count', 'SUM(frist_topup_num)' => 'recharge_p',
-                'SUM(topup_money)' => 'recharge_sum','SUM(withdraw)'=> 'withdraw_sum','SUM(order_num)'=> 'invest_count',
-                'SUM(order_dividend)'=> 'invest_reward','SUM(red_packet)'=>'residue_num'])
-                ->find();
+                    ->field(['SUM(regis_num)' => 'user_count', 'SUM(frist_topup_num)' => 'recharge_p',
+                             'SUM(topup_money)' => 'recharge_sum','SUM(withdraw)'=> 'withdraw_sum','SUM(order_num)'=> 'invest_count',
+                             'SUM(order_dividend)'=> 'invest_reward','SUM(red_packet)'=>'residue_num'])
+                    ->find();
                 //用户数量
                 $user_count = $system_statement['user_count'];
 
@@ -286,12 +289,12 @@ class Index extends Controller
                 $this->user_count_yesterday = Db::name('LcSystemStatement')->where("time='$yesterday'")->sum('regis_num');
                 //昨日订单笔数
                 $this->invest_count_yesterday = Db::name('LcSystemStatement')->where("time='$yesterday'")->sum('order_num');
-                
-               
+
+
                 //充值人数
                 $recharge_p = $system_statement['recharge_p'];
                 $this->recharge_p = $recharge_p+$first_charge_count_today;
-                
+
                 //首充人数
                 $this->first_charge_count = $recharge_p;
                 //昨日首充人数
@@ -307,14 +310,14 @@ class Index extends Controller
 
                 //投资收益
                 $this->invest_reward  =$system_statement['invest_reward'];
- 
+
                 // 兑换红包
                 $this->residue_num = $system_statement['residue_num'];
 
-                
+
                 // 总结余（充值-提现）
                 $this->aggregate_balance = $this->recharge_sum - $this->withdraw_sum;
-                
+
 
                 // 波比（提现 / 充值）
                 $this->poby = $this->recharge_sum ? bcmul($this->withdraw_sum/$this->recharge_sum, 100, 2) . "%" : '--';
@@ -322,7 +325,7 @@ class Index extends Controller
                 $this->wait_withdraw_count = Db::name('LcUserWithdrawRecord')->where("status = 0")->sum("money");
             }
             $now = date('Y-m-d H:i:s');//现在
-            
+
             $today = date('Y-m-d 00:00:00');//今天0点
             $yesterday = date('Y-m-d 00:00:00', strtotime($now)-86400);//昨天
             $table = $this->finance_report($now,$today,$yesterday,$i_time, $ids,$auth['username']);
@@ -331,7 +334,7 @@ class Index extends Controller
             $this->month = $table['month'];
             $this->last_month = $table['last_month'];
             $this->day = $table['day'];
-            
+
             $this->fetch();
         }
         $this->error("请先登录");
@@ -343,30 +346,30 @@ class Index extends Controller
         //综合报表
         //今日
         $today1 = $this->getDatas($nows,$today,$now,$ids,$uname);
-        
+
         //昨日
         $yesterday1 = $this->getDatas($yesterdays,$yesterday,$today,$ids,$uname);
-        
-        
+
+
         //本月
         // $firstDate = date('Y-m-01 00:00:00', strtotime(date("Y-m-d")));
         // $lastDate = date('Y-m-d 23:59:59',strtotime("last day of this month",strtotime(date("Y-m-d"))));
         // $month = $this->getDatas($firstDate,$lastDate,$ids);
         $month = null;
-        
+
         //上月
         // $lastMonthFirstDate = date('Y-m-01 00:00:00',strtotime('-1 month'));
         // $lastMonthLastDate = date('Y-m-d 23:59:59',strtotime('-1 month'));
         // $lastMonth = $this->getDatas($lastMonthFirstDate,$lastMonthLastDate,$ids);
-        
+
         $lastMonth = null;
         //明细
         if(empty($i_time)){
             $monthDays = $this->getMonthDays();
         }else{
-            $monthDays = $this->getDays($i_time);  
+            $monthDays = $this->getDays($i_time);
         }
-        
+
         foreach($monthDays as $k=>$v){
             $first = date('Y-m-d 00:00:00', strtotime($v));
             $last = date('Y-m-d 23:59:59', strtotime($v));
@@ -380,11 +383,11 @@ class Index extends Controller
                 }
                 break;
             }
-            
+
             $day[$k] = $this->getDatas($v,$first,$last,$ids,$uname);
-            
+
             $day[$k]['date'] = $v;
-            
+
         }
 
         $day = array_reverse($day);
@@ -401,8 +404,8 @@ class Index extends Controller
             if($uname != 'admin' || ($uname == 'admin' && $ids)){
 
                 $system_statement = Db::name('LcSystemStatement')->where("time='$now'")->whereIn('system_id', $ids)
-                ->field(['SUM(order_dividend)' => 'invest_reward','SUM(red_packet)'=>'residue_num'])
-                ->find();
+                    ->field(['SUM(order_dividend)' => 'invest_reward','SUM(red_packet)'=>'residue_num'])
+                    ->find();
 
 
                 $data['new_user'] = Db::name('LcUser')->where("time BETWEEN '$time1' AND '$time2' and is_real =0")->whereIn('system_user_id', $ids)->count();
@@ -423,7 +426,7 @@ class Index extends Controller
                     $data['recharge']  = 0;
                     $data['recharge_count'] = 0;
                 }
-                
+
                 //充值人数
                 $data['recharge_p'] = count(Db::name('LcUserRechargeRecord')->alias('rr')->join('lc_user u', 'u.id=rr.uid')->whereIn('u.system_user_id', $ids)->where("rr.time BETWEEN '$time1' AND '$time2' AND rr.status = 1")->group('rr.uid')->column('rr.uid'));
                 //首充金额
@@ -438,10 +441,10 @@ class Index extends Controller
                     $data['first_charge_price']  = 0;
                     $data['first_charge_count'] = 0;
                 }
-                
+
                 //提现金额
                 $withdraws= Db::name('LcUserWithdrawRecord')->alias('rr')->join('lc_user u', 'u.id=rr.uid')->whereIn('u.system_user_id', $ids)->where("rr.time2 BETWEEN '$time1' AND '$time2' AND rr.status = 1")
-                ->field(['SUM(rr.money)' => 'withdraw1', 'SUM(rr.charge)' => 'withdraw2'])->find();
+                    ->field(['SUM(rr.money)' => 'withdraw1', 'SUM(rr.charge)' => 'withdraw2'])->find();
                 $data['withdraw'] = $withdraws['withdraw1'] - $withdraws['withdraw2'];
                 //提现待处理
                 $data['withdraw_now'] = Db::name('LcUserWithdrawRecord')->alias('rr')->join('lc_user u', 'u.id=rr.uid')->whereIn('u.system_user_id', $ids)->where("rr.act_time BETWEEN '$time1' AND '$time2'")->where("rr.status = 0")->sum('rr.money');
@@ -451,8 +454,8 @@ class Index extends Controller
             }else{
 
                 $system_statement = Db::name('LcSystemStatement')->where("time='$now'")
-                ->field(['SUM(order_dividend)' => 'invest_reward','SUM(red_packet)'=>'residue_num'])
-                ->find();
+                    ->field(['SUM(order_dividend)' => 'invest_reward','SUM(red_packet)'=>'residue_num'])
+                    ->find();
 
 
                 $data['new_user'] = Db::name('LcUser')->where("time BETWEEN '$time1' AND '$time2' and is_real = 0")->count();
@@ -473,7 +476,7 @@ class Index extends Controller
                 }
                 //充值人数
                 $data['recharge_p'] = count(Db::name('LcUserRechargeRecord')->alias('rr')->where("rr.time BETWEEN '$time1' AND '$time2' AND rr.status = 1")->group('rr.uid')->column('rr.uid'));
-                
+
                 //首充金额
                 $first_charge = Db::query("select sum(r.money) as money,count(r.id) as count from lc_user_recharge_record r where  r.count=1 and r.status =1 and r.time BETWEEN '$time1' AND '$time2' ");
                 if(!empty($first_charge[0])){
@@ -484,10 +487,10 @@ class Index extends Controller
                     $data['first_charge_price']  = 0;
                     $data['first_charge_count'] = 0;
                 }
-                
+
                 //提现金额
                 $withdraws= Db::name('LcUserWithdrawRecord')->alias('rr')->join('lc_user u', 'u.id=rr.uid')->where("rr.time2 BETWEEN '$time1' AND '$time2' AND rr.status = 1")
-                ->field(['SUM(rr.money)' => 'withdraw1', 'SUM(rr.charge)' => 'withdraw2'])->find();
+                    ->field(['SUM(rr.money)' => 'withdraw1', 'SUM(rr.charge)' => 'withdraw2'])->find();
                 $data['withdraw'] = $withdraws['withdraw1'] - $withdraws['withdraw2'];
                 //提现待处理
                 $data['withdraw_now'] = Db::name('LcUserWithdrawRecord')->alias('rr')->where("rr.act_time BETWEEN '$time1' AND '$time2'")->where("rr.status = 0")->sum('rr.money');
@@ -500,12 +503,12 @@ class Index extends Controller
             if($uname != 'admin' || ($uname == 'admin' && $ids)){
                 // 通过日期查询统计数据
                 $system_statement = Db::name('LcSystemStatement')->where("time='$date'")->whereIn('system_id', $ids)
-                ->field(['SUM(regis_num)' => 'new_user','SUM(order_num)'=>'invest'
-                ,'SUM(order_dividend)'=>'invest_reward','SUM(red_packet)'=>'residue_num'
-                ,'SUM(topup_money)'=>'recharge','SUM(topup_num)'=>'recharge_p','SUM(topup_order_num)'=>'recharge_count'
-                ,'SUM(frist_topup_money)'=>'first_charge_price','SUM(frist_topup_num)'=>'first_charge_count'
-                ,'SUM(withdraw)'=>'withdraw'])
-                ->find();
+                    ->field(['SUM(regis_num)' => 'new_user','SUM(order_num)'=>'invest'
+                             ,'SUM(order_dividend)'=>'invest_reward','SUM(red_packet)'=>'residue_num'
+                             ,'SUM(topup_money)'=>'recharge','SUM(topup_num)'=>'recharge_p','SUM(topup_order_num)'=>'recharge_count'
+                             ,'SUM(frist_topup_money)'=>'first_charge_price','SUM(frist_topup_num)'=>'first_charge_count'
+                             ,'SUM(withdraw)'=>'withdraw'])
+                    ->find();
 
 
                 //注册
@@ -517,7 +520,7 @@ class Index extends Controller
                 //兑换红包
                 $data['residue_num'] = $system_statement['residue_num'];
                 //充值金额
-                // $recharge = Db::query("select sum(r.money) as money,count(r.id) as count from lc_user_recharge_record r  , lc_user u 
+                // $recharge = Db::query("select sum(r.money) as money,count(r.id) as count from lc_user_recharge_record r  , lc_user u
                 // where u.id=r.uid and u.system_user_id in (".implode(',', $ids).") and  r.status =1 and r.time BETWEEN '$time1' AND '$time2' ");
                 $data['recharge']  = $system_statement['recharge'];
                 //充值人数
@@ -540,12 +543,12 @@ class Index extends Controller
             }else{
                 // 通过日期查询统计数据
                 $system_statement = Db::name('LcSystemStatement')->where("time='$date'")
-                ->field(['SUM(regis_num)' => 'new_user','SUM(order_num)'=>'invest'
-                ,'SUM(order_dividend)'=>'invest_reward','SUM(red_packet)'=>'residue_num'
-                ,'SUM(topup_money)'=>'recharge','SUM(topup_num)'=>'recharge_p','SUM(topup_order_num)'=>'recharge_count'
-                ,'SUM(frist_topup_money)'=>'first_charge_price','SUM(frist_topup_num)'=>'first_charge_count'
-                ,'SUM(withdraw)'=>'withdraw'])
-                ->find();
+                    ->field(['SUM(regis_num)' => 'new_user','SUM(order_num)'=>'invest'
+                             ,'SUM(order_dividend)'=>'invest_reward','SUM(red_packet)'=>'residue_num'
+                             ,'SUM(topup_money)'=>'recharge','SUM(topup_num)'=>'recharge_p','SUM(topup_order_num)'=>'recharge_count'
+                             ,'SUM(frist_topup_money)'=>'first_charge_price','SUM(frist_topup_num)'=>'first_charge_count'
+                             ,'SUM(withdraw)'=>'withdraw'])
+                    ->find();
 
 
 
@@ -558,7 +561,7 @@ class Index extends Controller
                 //兑换红包
                 $data['residue_num'] = $system_statement['residue_num'];
                 //充值金额
-                // $recharge = Db::query("select sum(r.money) as money,count(r.id) as count from lc_user_recharge_record r  , lc_user u 
+                // $recharge = Db::query("select sum(r.money) as money,count(r.id) as count from lc_user_recharge_record r  , lc_user u
                 // where u.id=r.uid and u.system_user_id in (".implode(',', $ids).") and  r.status =1 and r.time BETWEEN '$time1' AND '$time2' ");
                 $data['recharge']  = $system_statement['recharge'];
                 //充值人数
@@ -578,20 +581,20 @@ class Index extends Controller
                 // 结余
                 $data['aggregate_balance'] = $data['recharge'] - $data['withdraw'];
             }
-            
+
         }
-        
+
         return $data;
-    
+
     }
-    
+
     /**
      * 获取当前月已过日期
      * @return array
      */
     private function getDays($i_time)
     {
-        
+
         $monthDays = [];
         $time = explode(" - ",$i_time);
         $firstDay = $time[0];
