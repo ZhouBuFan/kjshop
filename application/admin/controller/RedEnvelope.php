@@ -105,74 +105,45 @@ class RedEnvelope extends Controller
         // $this->title = '添加红包';
         if ($this->request->isPost()) {
             $params = $this->request->param();
-            $params['money'] ;
-            $params['num'];
-            $params['f_user_id'];
-            $params['code'];
-            $total= $params['money'] ;
-            $min = 100; 
-            if($params['num'] == 1){//单人红包
-                Cache::store('redis')->lpush( $params['code'],$total);
-                
-            }else{
-                //按人均来上下浮动
-                $num = $params['num'];
-                //人均
-                $money = $total / $num;
-                for($i=0;$i<$num;$i++){
-                    // if($money <= 1000){
-                    //     $fd=mt_rand(-100,100);
-                    // }elseif($money > 1000 && $money <=3000){
-                    //     $fd=mt_rand(-300,300);
-                    // }elseif($money > 3000){
-                    //     $fd=mt_rand(-500,500);
-                    // }
-                    $fd=mt_rand(-$money*0.1,$money*0.1);
-                    if(intval($money+$fd) <0){
-                        Cache::store('redis')->lpush($params['code'],1);
-                    }else{
-                        Cache::store('redis')->lpush($params['code'],intval($money+$fd));
+            $total = $params['money']; // 红包总金额
+            $num = $params['num']; // 红包个数
+            $type = $params['type']; // 红包类型
+            $code = $params['code']; // 红包标识码
+
+            if ($num == 1) { // 单人红包
+                Cache::store('redis')->lpush($code, $total);
+            } else {
+                if ($type == 1) { // 随机红包
+                    $min = 1; // 每个红包的最小金额
+                    $remainingAmount = $total; // 剩余金额
+                    $remainingNum = $num; // 剩余红包数量
+
+                    for ($i = 0; $i < $num - 1; $i++) {
+                        // 保证随机红包金额在 [min, 剩余金额 / 剩余红包数量 * 2] 范围内
+                        $max = ($remainingAmount / $remainingNum) * 2;
+                        $money = mt_rand($min * 100, $max * 100) / 100; // 生成随机金额，保留两位小数
+
+                        $remainingAmount -= $money; // 剩余金额减少
+                        $remainingNum--; // 剩余红包数量减少
+                        $money=bcadd($money,0,2);
+                        Cache::store('redis')->lpush($code, $money); // 将红包金额放入缓存队列
                     }
-                    
+
+                    // 最后一个红包，直接放入剩余的金额
+                    $remainingAmount=bcadd($remainingAmount,0,2);
+                    Cache::store('redis')->lpush($code, $remainingAmount);
+                } else { // 平均红包
+                    $avg = $total / $num; // 计算每个红包的平均金额
+                    for ($i = 0; $i < $num; $i++) {
+                        $avg=bcadd($avg,0,2);
+                        Cache::store('redis')->lpush($code, $avg); // 每个红包都是平均金额
+                    }
                 }
-
-
-
-
-                // //多人红包
-                // $num = $params['num'];
-                // for($i=1;$i<$num;$i++){
-                //     $safe_total = ($total-($num-$i)*$min)/($num-$i);
-                //     $money=mt_rand($min*100,$safe_total*100)/100;
-                //     $total = $total-$money;
-                //     //第1- -1个红包;
-                //     // print_r( $params['code'].'第'.$i.'个红包：'.$money. '元,余额：'.$total. '元</br>');
-                //     // $money =  number_format($money, 2);
-                //     if($money<500){
-                //         $money = 500;
-                //     }
-                //     if($money>4000){
-                //         $money = 4000;
-                //     }
-                //     Cache::store('redis')->lpush($params['code'],intval($money));
-                    
-                // }
-                // if($total<500){
-                //     $total = 500;
-                // }
-                // if($total>4000){
-                //     $total = 4000;
-                // }
-                // //最后一个红包
-                // // $total = number_format($total,2);
-                // // print_r($params['code'].'第'.$num.'个红包：'.$total. '元,余额：0元</br>');   
-                // Cache::store('redis')->lpush($params['code'],intval($total));
             }
         }
-        // print_r('123213213123');
         $this->_form($this->table, 'form');
-        
     }
+
 
     /**
      * 编辑红包
