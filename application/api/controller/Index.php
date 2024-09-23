@@ -704,7 +704,11 @@ class Index extends Controller
        
         
         // $length = Db::name('LcItem')->field("title_en_us as title,content_en_us as content,id,img2 as img,min,day,rate,type,need_integral")->where(['show' => 1])->where($where)->order('sort asc,id desc')->count();
-        
+        foreach ($items as &$item) {
+            if($item['type']==12){
+                $item['type'] = 6;
+            }
+        }
         // foreach ($items as &$item) {
         //     $item['min'] = changeMoneyByLanguage($item['min'],$language);
         //     $item['max'] = changeMoneyByLanguage($item['max'],$language);
@@ -776,7 +780,9 @@ class Index extends Controller
             //     $user['limit_today'] = true;
             // }
         }
-        
+        if($item['type']==12){
+            $item['type'] = 6;
+        }
         $data = array(
             'item' => $item,
             'user'=>$user

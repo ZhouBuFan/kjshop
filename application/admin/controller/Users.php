@@ -418,6 +418,10 @@ class Users extends Controller
                 $total_num = $item['day'];
             }elseif($item['type']==8){
                 $total_num = $item['day'];
+            }elseif($item['type']==12){
+                //日利率
+                $total_interest = $item['min'] * $item['rate'] * $item['day'] / 100;
+                $total_num = $item['day'];
             }
             $time2_actual = dateTimeChangeByZone($time2, 'Asia/Shanghai', $time_zone, 'Y-m-d H:i:s');
             $orderNo = 'ST' . date('YmdHis') . rand(1000, 9999) . rand(100, 999);

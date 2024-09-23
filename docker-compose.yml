@@ -16,6 +16,12 @@ services:
     volumes:
       - ./nginx.conf:/opt/bitnami/nginx/conf/server_blocks/app.conf
       - ./:/app
+  mysql:
+    image: 'bitnami/mysql:5.7'
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456 # root用户密码
+    ports:
+      - '3307:3306'
 
   redis:
     image: bitnami/redis
