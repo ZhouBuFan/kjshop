@@ -19,13 +19,13 @@ return [
     // 数据库类型
     'type'        => 'mysql',
     // 服务器地址
-    'hostname'    => '103.142.8.46',
+    'hostname'    => 'mysql',
     // 数据库名
     'database'    => 'kj',
     // 用户名
-    'username'    => 'kj',
+    'username'    => 'root',
     // 密码
-    'password'    => 'FwsPwcyn7QrSYcyP',
+    'password'    => '123456',
     // 编码
     'charset'     => 'utf8mb4',
     // 端口

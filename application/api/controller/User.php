@@ -4087,7 +4087,8 @@ class User extends Controller
            $this->error('Old password error',"",218);
        }
        Db::name('LcUser')->where("id=$uid")->update(['password' => md5($password)]);
-       $this->success('success');
+       $this->error('login.loginFirst','',403);
+//       $this->success('success');
    }
 
    //获取邀请函
