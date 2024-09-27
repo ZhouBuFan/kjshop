@@ -1,0 +1,56 @@
+{extend name='admin@main'}
+{block name="button"}
+{/block}
+{block name="content"}
+<div class="think-box-shadow">
+    <button data-modal='{:url("add")}' data-title="添加拉黑账户" class='layui-btn layui-btn-sm layui-btn-primary'>添加拉黑账户</button>
+
+    {include file='black_wallet/index_search'}
+    <table class="layui-table margin-top-10" lay-skin="line">
+        {notempty name='list'}
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'></label>
+            </th>
+            <th class='text-left'>银行账户</th>
+            <th class='text-left'>创建时间</th>
+            <th class='text-left'>添加管理员</th>
+            <th></th>
+        </tr>
+        </thead>
+        {/notempty}
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+             <td class='list-table-check-td think-checkbox'>
+                <label><input class="list-check-box" value='{$vo.id}' type='checkbox'></label>
+            </td>
+
+            <td class='text-left nowrap'>
+                {$vo.account|default='--'}
+            </td>
+            <td class='text-left'>
+                {$vo.created_at|default=''}
+            </td>
+            <td class='text-left'>
+                {$vo.sys_user|default=''}
+            </td>
+            <td class='text-left'>
+
+                <div class="nowrap margin-bottom-5">
+                    {if auth("admin/black_wallet/remove")}
+                        <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除吗?" data-action="{:url('remove')}" data-value="id#{$vo.id}" data-csrf="{:systoken('remove')}">删 除</a>
+                    {else}
+                        <a data-tips-text="您没有删除的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">删 除</a>
+                    {/if}
+                </div>
+
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+</div>
+{/block}

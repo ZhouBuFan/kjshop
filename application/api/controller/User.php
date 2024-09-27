@@ -1021,6 +1021,13 @@ class User extends Controller
         
         $wallet = Db::name('LcUserWallet')->where(['deleted_at' => '0000-00-00 00:00:00'])->field('id,wid,type,name,wname,account')->find($params['id']);
         if(empty($wallet)) $this->error('utils.parameterError',"",218);
+
+        //判断该账户是否被拉黑
+        $black_wallet = Db::name('LcBlackWallet')
+            ->whereRaw('deleted_at IS NULL')
+            ->where('account', $wallet['account'])
+            ->find();
+        if(!empty($black_wallet)) $this->error('login.userLocked',"",218);
         $wname = '';
         if($wallet['type']==1){
             $wname = $wallet['wname']." (".substr($wallet['account'],0,4).'****'.substr($wallet['account'],strlen($wallet['account'])-4,strlen($wallet['account'])).")";
