@@ -46,10 +46,20 @@ class RedEnvelope extends Controller
     {
         $this->title = '红包列表';
         $auth = $this->app->session->get('user');
+        $code=$this->request->param('code');
         $where = '';
         if (isset($auth['username']) and $auth['username'] != 'admin') {
-            $where = "(f_user_id in (select uid from system_user_relation where parentid={$auth['id']}) or f_user_id={$auth['id']} )";
+            $where = "(f_user_id in (select uid from system_user_relation where parentid={$auth['id']}) or f_user_id={$auth['id']} ) ";
+            if(!empty($code)){
+                $where.=" and code like '%{$code}%'";
+            }
+        }else{
+            if(!empty($code)){
+                $where = "code like '%{$code}%'";
+            }
         }
+
+
         $query = $this->_query($this->table)->where($where);
         $query->order('id desc')->page();
     }
@@ -64,13 +74,26 @@ class RedEnvelope extends Controller
 
         if ($this->request->isGet()) {
             if(!isset($vo['type'])) $vo['type'] = '1';
-            if(empty($vo['code'])) $vo['code'] = strtoupper(substr(uniqid(),0,9));
+            if(empty($vo['code'])) $vo['code'] =$this->created_code();
+
             if(empty($vo['f_user_id'])) $vo['f_user_id'] = $user['id'];
             // $vo['s_name'] = Db::table('system_user')->where("id={$user['id']}")->value('username');  
                  
         }
         
         
+    }
+
+    //生成红包码
+    public function created_code()
+    {
+        $code = strtoupper(substr(uniqid(),0,9));
+        $codelog=Db::name("LcRedEnvelope")->where('code',$code)->find();
+        if($codelog){
+            $this->created_code();
+        }else{
+            return $code;
+        }
     }
 
  /**
