@@ -138,6 +138,9 @@
                         {if $vo.type == 6}
                         <a data-dbclick class="layui-btn layui-btn-sm" data-modal='{:url("edit_ydusdt2")}?id={$vo.id}'>编 辑</a>
                         {/if}
+                        {if $vo.type>=7}
+                        <a data-dbclick class="layui-btn layui-btn-sm" data-modal='{:url("edit_setting")}?id={$vo.id}'>编 辑</a>
+                        {/if}
                     {else}
                     <a data-tips-text="您没有编辑的权限哦！" class="layui-btn layui-btn-sm layui-btn-primary layui-disabled">编 辑</a>
                     {/if}

@@ -99,6 +99,13 @@ class RechargeMethod extends Controller
         $this->title = '编辑USDT（需提交hash）';
         $this->_form($this->table, 'form_usdt');
     }
+
+    public function edit_setting()
+    {
+        $this->title = '编辑';
+        $this->_form($this->table, 'form_setting');
+    }
+
     /**
      * 添加优盾USDT（需提交hash）
      * @auth true
