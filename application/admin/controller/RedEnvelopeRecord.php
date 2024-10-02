@@ -50,7 +50,7 @@ class RedEnvelopeRecord extends Controller
             $where = "(d.f_user_id in (select uid from system_user_relation where parentid={$auth['id']}) or d.f_user_id={$auth['id']} )";
         }
         $query = $this->_query($this->table)->alias('i')->field('i.*,d.code as code,u.username,d.type as dtype');
-        $query->where($where)->join('lc_red_envelope d','i.pid=d.id')->join('lc_user u','i.uid=u.id')->equal('d.type#i_type')->like('u.username#u_username')->dateBetween('i.time#i_time')->order('i.id desc')->page();
+        $query->where($where)->join('lc_red_envelope d','i.pid=d.id')->join('lc_user u','i.uid=u.id')->equal('d.type#i_type')->like('u.username#u_username')->like('d.code#d_code')->dateBetween('i.time#i_time')->order('i.id desc')->page();
     }
     
     /**

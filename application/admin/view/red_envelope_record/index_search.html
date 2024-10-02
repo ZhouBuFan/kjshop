@@ -8,6 +8,12 @@
             </div>
         </div>
         <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">红包码</label>
+            <div class="layui-input-inline">
+                <input name="d_code" value="{$Think.get.d_code|default=''}" placeholder="请输入红包码" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
             <label class="layui-form-label">时间（系统时间）</label>
             <div class="layui-input-inline">
                 <input data-date-range name="i_time" value="{$Think.get.i_time|default=''}" placeholder="请选择时间" class="layui-input">
@@ -17,7 +23,7 @@
             <label class="layui-form-label">类型</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="i_type">
-                    {foreach [''=>'- 全部类型 -','1'=>'实物','2'=>'现金','3'=>'未中奖'] as $k=>$v}
+                    {foreach [''=>'- 全部类型 -','1'=>'随机','2'=>'固定'] as $k=>$v}
                     <!--{eq name='Think.get.i_type' value='$k.""'}-->
                     <option selected value="{$k}">{$v}</option>
                     <!--{else}-->
