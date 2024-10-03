@@ -2114,8 +2114,20 @@ class User extends Controller
                         setNumber('LcUser', 'draw_num', $item['superior_draw_num'], 1, "id = $parentid");
                     }
                 }
-                
             }
+            if($item['superior_money']>0){
+                if($investNum<1) {
+                    $parentid = Db::table('lc_user_relation')->where("uid=$uid and level=1")->value('parentid');
+                    $parentInfo=Db::name('lc_user')->where("id=$parentid")->find();
+                    $sysUserInfo=Db::name('system_user')->where('id',$parentInfo['system_user_id'])->whereLike('username','%DD%')->find();
+                    if ($parentid && !empty($sysUserInfo)) {
+                        addFunding($parentid, $item['superior_money'], $item['superior_money'], 1, 11, $language);
+                        //添加余额
+                        setNumber('LcUser', 'withdrawable', $item['superior_money'], 1, "id = $parentid");
+                    }
+                }
+            }
+
             if ($item['draw_num'] > 0) {
                 //如果之前购买过该产品 就送抽奖 每购买过不送
                 if($investNum>0){

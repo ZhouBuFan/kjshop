@@ -737,15 +737,15 @@ class Index extends Controller
         $id = $params["id"];
         
         $item = '';
-        if(Cache::store('redis')->hget('itemsdetail',$id)){
-            $item = json_decode(Cache::store('redis')->hget('itemsdetail',$id),true);
-        }else{
+//        if(Cache::store('redis')->hget('itemsdetail',$id)){
+//            $item = json_decode(Cache::store('redis')->hget('itemsdetail',$id),true);
+//        }else{
             $item = Db::name('LcItem')->where(['show' => 1])->find($id);
             $item['title'] = $item['title_en_us'];
             $item['content'] = $item['content_en_us'];
             $item['img'] = $item['img2'];
             Cache::store('redis')->hset('itemsdetail',$id,json_encode($item));
-        }
+//        }
         if(empty($item)) $this->error('utils.parameterError',"",218);
         // $item['min'] = changeMoneyByLanguage($item['min'],$language);
         // $item['max'] = changeMoneyByLanguage($item['max'],$language);
