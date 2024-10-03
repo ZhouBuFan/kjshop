@@ -136,7 +136,7 @@ class User extends Controller
         // $invest_reward = Cache::store('redis')->hget('funding',$uid);
         // if(empty($invest_reward)){
             //总收益
-            $invest_reward = Db::name('LcUserFunding')->where('uid', $uid)->where("type = 1 AND fund_type in (6,14,19,20)")->sum('money');
+            $invest_reward = Db::name('LcUserFunding')->where('uid', $uid)->where("type = 1 AND fund_type in (6,11,14,19,20)")->sum('money');
             Cache::store('redis')->hset('funding',$uid,$invest_reward);
         // }
         
