@@ -938,14 +938,19 @@ class Index extends Controller
         $uid = $this->userInfo['id'];
         $id = $this->request->param('id');
         $article = '';
-        if(Cache::store('redis')->hget("articledetail",$id)){
-            $article = json_decode(Cache::store('redis')->hget("articledetail",$id),true);
-        }else{
-            $article = Db::name('LcArticle')->field("title_en_us,content_en_us")->find($id);
-            Cache::store('redis')->hset("articledetail",$id,json_encode($article));
+
+       $user_article= Db::name('LcInvitationAppoint')->where('uid',$uid)->order('id desc')->find();
+       $article_id=$user_article['article_id'];
+       if(!empty($user_article)){
+            if(Cache::store('redis')->hget("articledetail",$article_id)){
+                $article = json_decode(Cache::store('redis')->hget("articledetail",$article_id),true);
+            }else{
+                $article = Db::name('LcArticle')->field("title_en_us,content_en_us")->find($article_id);
+                Cache::store('redis')->hset("articledetail",$article_id,json_encode($article));
+            }
         }
-        
-        Db::name('LcArticle')->where(['id' => $id])->setInc('read_num');
+
+        Db::name('LcArticle')->where(['id' => $article_id])->setInc('read_num');
         $data = array(
             'title' => $article["title_en_us"],
             'content' => $article["content_en_us"]

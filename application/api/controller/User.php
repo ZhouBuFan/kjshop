@@ -2298,7 +2298,8 @@ class User extends Controller
                     $invest['is_receive'] = 0;
                 }
                 
-            }elseif($invest['type'] == 6){
+            }
+            elseif($invest['type'] == 6){
                  //待领取数据>=1才可以
                 if($invest['wait_num'] <1){
                     $invest['is_receive'] = 0;
@@ -2342,7 +2343,8 @@ class User extends Controller
                     $d222=strtotime($Date_2);
                     $invest['lasttime'] =  date('d M Y · H:i', $d222 + 86400);
                 }
-            }elseif($invest['type'] == 7){  //6小时领一次的产品
+            }
+            elseif($invest['type'] == 7){  //6小时领一次的产品
                 //待领取数据>=1才可以
                if($invest['wait_num'] <1){
                    $invest['is_receive'] = 0;
@@ -2386,17 +2388,20 @@ class User extends Controller
                    $d222=strtotime($Date_2);
                    $invest['lasttime'] =  date('d M Y · H:i', $d222 + 86400);
                }
-           }elseif($invest['type'] == 8){  //机器定投
+           }
+            elseif($invest['type'] == 8){  //机器定投
                 $Date_2=date("Y-m-d", strtotime($invest['time2_actual']));
                 $invest['is_receive'] = $act_time >= $Date_2 ? 1 : 0;
                 $invest['time_actual'] = date('d M Y · H:i', strtotime($invest['time_actual']));
                 $invest['lasttime'] = date('d M Y · H:i', strtotime($invest['time2_actual']));
-           }elseif($invest['type'] == 5){  //定投
+           }
+            elseif($invest['type'] == 5){  //定投
                 $Date_2=date("Y-m-d", strtotime($invest['time2_actual']));
                 $invest['is_receive'] = $act_time >= $Date_2 ? 1 : 0;
                 $invest['time_actual'] = date('d M Y · H:i', strtotime($invest['time_actual']));
                 $invest['lasttime'] = date('d M Y · H:i', strtotime($invest['time2_actual']));
-           }elseif($invest['type'] == 9){  //税务机器
+           }
+            elseif($invest['type'] == 9){  //税务机器
                 $d1=strtotime($Date_1);
                 $d2=strtotime($Date_2);
                 $day_diff=round(($d1-$d2)/3600/24);
@@ -2412,12 +2417,14 @@ class User extends Controller
                 }else{
                     $invest['is_receive'] = 0;
                 }
-           }elseif($invest['type'] == 10){  //加速卡
+           }
+            elseif($invest['type'] == 10){  //加速卡
                 $Date_2=date("Y-m-d", strtotime($invest['time2_actual']));
                 $invest['is_receive'] = $act_time >= $Date_2 ? 1 : 0;
                 $invest['time_actual'] = date('d M Y · H:i', strtotime($invest['time_actual']));
                 $invest['lasttime'] = date('d M Y · H:i', strtotime($invest['time2_actual']));
-            }elseif($invest['type']== 12){ //12小时领一次的机器
+            }
+            elseif($invest['type']== 12){ //12小时领一次的机器
                 //待领取数据>=1才可以
                 if($invest['wait_num'] <1){
                     $invest['is_receive'] = 0;

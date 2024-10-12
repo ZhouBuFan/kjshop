@@ -432,7 +432,8 @@
             };
             localStorage.getItem("ssid");
             a.ZP = async (e, a, n, r = !0) => {
-                let o = "en_us";
+                let llang = localStorage.getItem("lang");
+                let o = llang ? llang : "en_us";
                 r && l(), e = d.Z.commonUrl + "/api" + e;
                 const c = {method: "post", ...n};
                 localStorage.setItem("lang", o);

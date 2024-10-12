@@ -43467,6 +43467,11 @@
                         value: "",
                         logo: "user/details.png",
                         url: "/funding/record"
+                    },  {
+                        title: "আমন্ত্রণ পত্র",
+                        value: "",
+                        logo: "index/kefu.png",
+                        url: "/article/invite"
                     }],
                     menus2: [{title: this.$t("user.faq"), value: "", logo: "user/question.png", url: "/questions"}],
                     data: {},
