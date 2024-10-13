@@ -735,6 +735,7 @@ class Index extends Controller
         $this->checkToken($language);
         $uid = $this->userInfo['id'];
         $id = $params["id"];
+
         
         $item = '';
 //        if(Cache::store('redis')->hget('itemsdetail',$id)){
@@ -752,7 +753,13 @@ class Index extends Controller
         
         $item['k_x'] = array_map('floatval', explode(",",$item['k_x']));
         $item['k_y_12m'] = explode(",",$item['k_y_12m']);
-        
+        //查询优惠券金额
+        $coupon=Db::name('LcUserCouponLog')->where(['uid' => $uid,'pid' => $id,'status' => 0])->find();
+        if($coupon){
+            //扣除优惠券金额 和 余额折扣金额
+           $item['min'] =bcsub($item['min'],$coupon['money'],2);
+           $item['withdrawal_purchase']=100;
+        }
         //判断用户登录状态
         $login = $this->checkLogin();
         $user=array(

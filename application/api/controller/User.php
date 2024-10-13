@@ -1892,13 +1892,21 @@ class User extends Controller
         if (empty($item['show'])) {
             $this->error('Not listed',"",218);
         }
-        if($item['type']==5){
-            if($number<$item['min']){
-                $this->error('invest.investMin',"",218);
-            }
-            $item['min']=$number;
+        $coupon=Db::name('LcUserCouponLog')->where(['pid'=>$params['id'],'uid'=>$uid,'status'=>0])->find();
+        
+        // if($item['type']==5){
+        //     if($number<$item['min']){
+        //         $this->error('invest.investMin',"",218);
+        //     }
+        //     $item['min']=$number;
+        // }
+        if($coupon){
+            $money_usd = bcsub($item['min'],$coupon['money'],2);
+            $item['withdrawal_purchase']=100;
+        }else{
+            $money_usd = $item['min'];
         }
-         $money_usd = $item['min'];
+         
         //金额转换
         //判断余额/提现余额>投资金额
         $is_withdrawal_purchase = 0;
@@ -2054,7 +2062,9 @@ class User extends Controller
         Db::startTrans();
         $iid = Db::name('LcInvest')->insertGetId($insert);
         if(!empty($iid)){
-           
+            if($coupon){
+                Db::name('LcUserCouponLog')->where(["id" => $coupon['id']])->update(['status' => 1,'use_time' => date('Y-m-d H:i:s')]);
+            }
             if ($params['is_withdrawal_purchase']) {
                  //流水添加
                 addFunding($uid,$money_usd,changeMoneyByLanguage($money_usd,$language),2,5,$language,2);
@@ -2599,10 +2609,15 @@ class User extends Controller
         }
         $prizeList  = Cache::store('redis')->hget('draw','prize');
         if(empty($prizeList )){
-            $prizeList = Db::name('LcDrawPrize')->field("id,title_en_us as title,img,type")->where("status!=1")->order('sort asc,id asc')->select();
+            $prizeList = Db::name('LcDrawPrize')->field("id,title_en_us as title,img,type,coupon")->where("status!=1")->order('sort asc,id asc')->select();
             Cache::store('redis')->hset('draw','prize',json_encode($prizeList));
         }else{
             $prizeList  =json_decode($prizeList,true);
+        }
+        foreach ($prizeList as &$prize) {
+           if($prize['type']==5){
+               $prize['type']=4;
+           }
         }
         // $drawRecord = Db::name('LcDrawRecord dr,lcDrawPrize dp,lcUser u')->field("dp.title_en_us as title,u.username")->where('dr.pid = dp.id AND dr.uid = u.id AND dp.type!=3')->order('dr.act_time desc')->limit(8)->select();
        
@@ -2668,7 +2683,7 @@ class User extends Controller
         // 是否存在必中
         $draw_appoint  = Db::table('lc_draw_appoint')->where('uid', $uid)->whereNull('use_time')->find();
         if ($draw_appoint) {
-            $draw = Db::name('LcDrawPrize')->where('id', $draw_appoint['draw_prize_id'])->field("id,title_en_us as title,img,type,probability,money,item_id")->find();
+            $draw = Db::name('LcDrawPrize')->where('id', $draw_appoint['draw_prize_id'])->field("id,title_en_us as title,img,type,probability,money,item_id,coupon")->find();
             Db::table('lc_draw_appoint')->where('id', $draw_appoint['id'])->update(['time_zone' => $time_zone, 'act_use_time' => $act_time, 'use_time' => $time]);
         }else {
             $prizeList = '';
@@ -2677,11 +2692,11 @@ class User extends Controller
             // print_r($recodeList);
             $ids[] = $recodeList;
             if($recodeList ){//有中实物的记录 则不让中实物了
-                $prizeList  = Db::name('LcDrawPrize')->field("id,title_en_us as title,img,type,probability,money,item_id")->where("status!=1 and id not in (".implode(',', $recodeList).")")->order('sort asc,id desc')->select();
+                $prizeList  = Db::name('LcDrawPrize')->field("id,title_en_us as title,img,type,probability,money,item_id,coupon")->where("status!=1 and id not in (".implode(',', $recodeList).")")->order('sort asc,id desc')->select();
             }else{
                 $prizeList  = Cache::store('redis')->hget('draw','prizelist');
                 if(empty($prizeList )){
-                    $prizeList  = Db::name('LcDrawPrize')->field("id,title_en_us as title,img,type,probability,money,item_id")->where("status!=1")->order('sort asc,id desc')->select();
+                    $prizeList  = Db::name('LcDrawPrize')->field("id,title_en_us as title,img,type,probability,money,item_id,coupon")->where("status!=1")->order('sort asc,id desc')->select();
                     Cache::store('redis')->hset('draw','prizelist',json_encode($prizeList));
                 }else{
                     $prizeList = json_decode($prizeList,true);
@@ -2808,7 +2823,17 @@ class User extends Controller
             
             Db::name('LcInvest')->insertGetId($insert);
         }
-        
+        //添加矿机优惠券
+        if($draw['type']==5){
+            Db::name('LcUserCouponLog')->insertGetId(array(
+                'uid' => $uid,
+                'pid'=>$draw['item_id'],
+                'money' => $draw['coupon'],
+                'add_time' => date('Y-m-d H:i:s'),
+                'status' => 0,
+            ));
+            $draw['type'] = 4;
+        }
         $data = array(
             'draw' => $draw,
         );

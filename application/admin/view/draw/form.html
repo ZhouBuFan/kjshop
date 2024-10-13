@@ -70,7 +70,7 @@
             <label class="layui-col-xs3 relative">
                 <span class="color-green">类型</span>
                 <select class="layui-select" name="type">
-                    {foreach ['1'=>'实物','2'=>'现金','3'=>'未中奖', '4' => '产品'] as $k=>$v}
+                    {foreach ['1'=>'实物','2'=>'现金','3'=>'未中奖', '4' => '产品','5'=>'矿机优惠券'] as $k=>$v}
                     <!--{eq name='$vo.type' value='$k.""'}-->
                     <option selected value="{$k}">{$v}</option>
                     <!--{else}-->
@@ -78,6 +78,10 @@
                     <!--{/eq}-->
                     {/foreach}
                 </select>
+            </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">优惠券金额(非矿机优惠券不用填)</span>
+                <input name="coupon" class="layui-input" placeholder=">请输入d优惠券金额" value="{$vo.coupon|default='0'}">
             </label>
             <label class="layui-col-xs3 relative">
                 <span class="color-green">奖励金额(非现金不用填)</span>

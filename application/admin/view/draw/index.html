@@ -59,6 +59,9 @@
                 {if $vo.type == 4}
                 <span class="color-green">产品</span>
                 {/if}
+                {if $vo.type == 5}
+                <span class="color-green">优惠券</span>
+                {/if}
             </td>
             <td class='text-center nowrap'>
                 {$vo.probability|default='--'}
