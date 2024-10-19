@@ -124,6 +124,19 @@
                 <span class="color-green">赠送上级金额</span>
                 <input name="superior_money" class="layui-input" placeholder="请输入赠送积分" value="{$vo.superior_money|default='0'}">
             </label>
+            <label class="layui-col-xs3 relative">
+                <span class="color-green">赠送产品</span>
+                <select class="layui-select" name="free_item_id">
+                    <option value="">请选择产品</option>
+                    {foreach $items as $k=>$v}
+                    {eq name='$vo.item_id' value="$v['id']"}
+                    <option selected value="{$v['id']}">{$v['title_en_us']}</option>
+                    {else}
+                    <option value="{$v['id']}">{$v['title_en_us']}</option>
+                    {/eq}
+                    {/foreach}
+                </select>
+            </label>
         </div>
         <div class="layui-form-item layui-row layui-col-space15">
             

@@ -516,24 +516,24 @@ class User extends Controller
         $params = $this->request->param();
         $language = $params["language"];
         $this->checkToken($language);
-        
+
         //判断参数
         if(empty($params['phone'])||empty($params['code'])||empty($params['country_code'])) $this->error('utils.parameterError',"",218);
         //判断手机号是否正确
         if (!judge($params['phone'],"mobile_phone")) $this->error('auth.phoneError',"",218);
-       
+
         $userInfo = $this->userInfo;
         $user = Db::name('LcUser')->find($userInfo['id']);
         $uid = $user['id'];
         $phone = $params['phone'];
         $country_code = $params["country_code"];
         $phone_code = $country_code.$phone;//拼接国家区号后的手机号
-        
+
         if ($user['auth_phone'] == 1) $this->error('auth.phoneAuthed',"",218);
-        
-         //判断手机号是否被使用
+
+        //判断手机号是否被使用
         if (Db::name('LcUser')->where(['phone' => $params['phone']])->find()) $this->error('auth.phoneUsed',"",218);
-        
+
         $sms_code = Db::name("LcSmsCode")->where("phone = '$phone_code'")->order("id desc")->find();
         //判断验证码是否获取
         if(!$sms_code) $this->error('auth.codeFirst',"",218);
@@ -982,7 +982,7 @@ class User extends Controller
         $uid = $this->userInfo['id'];
         // 设置锁
         $cache_key = "withdraw_settle_{$uid}";
-        // Cache::store('redis')->rm($cache_key); 
+        // Cache::store('redis')->rm($cache_key);
 
         $boolg =Cache::store('redis')->rawCommand('set',$cache_key, '1',"EX",10,"NX");
         if(!$boolg){
@@ -994,7 +994,7 @@ class User extends Controller
         // Cache::store('redis')->set($cache_key, time(),600);
         // // 任务结束触发
         //  register_shutdown_function(function () use ($cache_key) {
-        //      Cache::store('redis')->rm($cache_key); 
+        //      Cache::store('redis')->rm($cache_key);
         //  });
 
         $user = Db::name("LcUser")->find($uid);
@@ -1841,18 +1841,19 @@ class User extends Controller
         $number = $params["number"];
 
         //设置矿机锁
-        // if ($params['id'] >= 397) {
-        //     // 设置时区为孟加拉时间（UTC+6）
-        //     date_default_timezone_set('Asia/Dhaka');
+        // if ($params['id'] >= 430) {
+        //      $this->error('Waiting to start！', "", 218);
+        // // 设置时区为孟加拉时间（UTC+6）
+        // date_default_timezone_set('Asia/Dhaka');
 
-        //     // 获取当前时间的小时和分钟
-        //     $current_hour = date('H');
-        //     $current_minute = date('i');
+        // // 获取当前时间的小时和分钟
+        // $current_hour = date('H');
+        // $current_minute = date('i');
 
-        //     // 检查是否大于 18:30
-        //     if ($current_hour < 18 || ($current_hour == 18 && $current_minute < 30)) {
-        //      $this->error('Purchase starts after 18:30', "", 218);
-        //     }
+        // // 检查是否大于 18:30
+        // if ($current_hour < 18 || ($current_hour == 18 && $current_minute < 30)) {
+        //  $this->error('Purchase starts after 18:30', "", 218);
+        // }
         // }
 
         // 设置锁
@@ -1884,6 +1885,7 @@ class User extends Controller
         }
 
         if(empty($item)) $this->error('utils.parameterError',"",218);
+
         //    dump($item);exit;
         if(!isset($item['vip_level'])){
             $item = Db::name('LcItem')->where(['show' => 1])->find($params['id']);
@@ -1920,7 +1922,9 @@ class User extends Controller
         }else{
             $money_usd = $item['min'];
         }
-
+        //   if($params['id']==412||$params['id']==413||$params['id']==414||$params['id']==415||$params['id']==416||$params['id']==417){
+        //         $money_usd=bcmul($item['min'],0.8,2);
+        //     }
         //金额转换
         //判断余额/提现余额>投资金额
         $is_withdrawal_purchase = 0;
@@ -1938,11 +1942,19 @@ class User extends Controller
         //判断投资次数
         //非定投
         if($item['type']!=5 && $item['type']!=8){
-            $investCount = Db::name('LcInvest')->where(['itemid' => $item['id'],'uid' => $uid,'status'=>0])->count();
+            if($item['id']==412){
+                $investCount = Db::name('LcInvest')->where(['itemid' => 399,'uid' => $uid,'status'=>0])->count();
+            }else{
+                $investCount = Db::name('LcInvest')->where(['itemid' => $item['id'],'uid' => $uid,'status'=>0])->count();
+            }
             if($investCount>=$item['num']) $this->error('invest.investNumEmpty',"",218);
         }else{
             //定投
-            $investCount = Db::name('LcInvest')->where(['itemid' => $item['id'],'uid' => $uid])->count();
+            if($item['id']==412){
+                $investCount = Db::name('LcInvest')->where(['itemid' => 399,'uid' => $uid])->count();
+            }else{
+                $investCount = Db::name('LcInvest')->where(['itemid' => $item['id'],'uid' => $uid])->count();
+            }
             if($investCount>=$item['num']) $this->error('invest.investNumEmpty',"",218);
         }
 
@@ -2045,7 +2057,9 @@ class User extends Controller
 
         //查询是第一次购买该产品还是复购
         $investNum =  Db::name('LcInvest')->where(['uid' => $uid])->where("itemid != 235")->count();
-
+        if($item['id']==424&&$investNum>=1){
+            $this->error('invest.investNumEmpty',"",218);
+        }
         $orderNo = 'ST' . date('YmdHis') . rand(1000, 9999) . rand(100, 999);
 
         //添加投资记录
@@ -2129,6 +2143,8 @@ class User extends Controller
             // if($draw['invest']>0){
             //     setNumber('LcUser', 'draw_num', $draw['invest'], 1, "id = $uid");
             // }
+
+
             if ($item['superior_draw_num'] > 0) {
                 //如果是第一次购买送上级 如果不是就不送
                 if($investNum<1){
@@ -2143,14 +2159,18 @@ class User extends Controller
                 if($investNum<1) {
                     $parentid = Db::table('lc_user_relation')->where("uid=$uid and level=1")->value('parentid');
                     $parentInfo=Db::name('lc_user')->where("id=$parentid")->find();
-                    $sysUserInfo=Db::name('system_user')->where('id',$parentInfo['system_user_id'])->whereLike('username','%DD%')->find();
-                    // $sysUserInfo = Db::name('system_user')
-                    //     ->where('id', $parentInfo['system_user_id'])
-                    //     ->where(function($query) {
-                    //         $query->whereLike('username', '%DD%')
-                    //             ->whereOr('username', 'BB005');
-                    //     })
-                    //     ->find();
+                    // $sysUserInfo=Db::name('system_user')->where('id',$parentInfo['system_user_id'])->whereLike('username','%DD%')->find();
+                    $sysUserInfo = Db::name('system_user')
+                        ->where('id', $parentInfo['system_user_id'])
+                        // ->where(function($query) {
+                        //     $query->whereLike('username', '%DD%')
+                        //         ->whereOr('username', 'BB005')
+                        //         ->whereOr('username', 'AA002')
+                        //         ->whereOr('username', 'AA001')
+                        //         ->whereOr('username', 'AA006')
+                        //         ->whereOr('username', 'BB007');
+                        // })
+                        ->find();
                     if ($parentid && !empty($sysUserInfo)) {
                         addFunding($parentid, $item['superior_money'], $item['superior_money'], 1, 11, $language);
                         //添加余额
@@ -2161,7 +2181,7 @@ class User extends Controller
 
             if ($item['draw_num'] > 0) {
                 //如果之前购买过该产品 就送抽奖 每购买过不送
-                if($investNum>0){
+                if($investNum>=0){
                     // 购买者
                     setNumber('LcUser', 'draw_num', $item['draw_num'], 1, "id = $uid");
                 }
@@ -2175,6 +2195,115 @@ class User extends Controller
                 }
             }
 
+            if($item['free_item_id']!=null && $item['free_item_id']>0){
+                //时区转换
+                $item = Db::name('LcItem')->find($item['free_item_id']);
+                $money_usd1 = $item['min'];
+                $time = date('Y-m-d H:i:s');
+                $time_zone = getTimezoneByLanguage($language);
+                $time_actual = dateTimeChangeByZone($time, 'Asia/Shanghai', $time_zone, 'Y-m-d H:i:s');
+                $currency = getCurrencyByLanguage($language);
+
+                $time2 = date('Y-m-d H:i:s', strtotime($time.'+' . $item['day'] . ' day'));
+                $total_interest = $money_usd1 * $item['rate'] / 100;
+                $total_num = 1;
+                $time2_actual = dateTimeChangeByZone($time2, 'Asia/Shanghai', $time_zone, 'Y-m-d H:i:s');
+                $orderNo = 'ST' . date('YmdHis') . rand(1000, 9999) . rand(100, 999);
+                //到期还本付息（时）
+                if($item['type']==3){
+                    //按时
+                    $time2 = date('Y-m-d H:i:s', strtotime($time.'+' . $item['day'] . ' hour'));
+                }
+                //每日付息到期还本
+                elseif($item['type']==1 || $item['type']==4){
+                    //日利率
+                    $total_interest = intval($item['min'] * $item['rate']/ 100 )* $item['day'] ;
+                    //返息期数
+                    $total_num = $item['day'];
+                }
+                if($investNum==0){
+                    //添加投资记录
+                    $insert1 = array(
+                        "uid" =>$uid,
+                        "itemid" =>$item['id'],
+                        "orderNo" =>$orderNo,
+                        "money" =>$item['min'],
+                        "money2" =>$money_usd,
+                        "total_interest" =>$total_interest,
+                        "wait_interest" =>$total_interest,
+                        "total_num" =>$total_num,
+                        "wait_num" =>$total_num,
+                        "day" =>$item['day'],
+                        "rate" =>$item['rate'],
+                        "type" =>$item['type'],
+                        "is_draw" => 1,
+                        "source" => 3,
+                        "not_receive" =>$item['not_receive'],
+                        "is_distribution" =>$item['is_distribution'],
+                        "currency" =>$currency,
+                        "time_zone" =>$time_zone,
+                        "time" =>$time,
+                        "time_actual" =>$time_actual,
+                        "time2" =>$time2,
+                        "time2_actual" =>$time2_actual,
+                    );
+                    $insert2 = array(
+                        "uid" =>$parentid,
+                        "itemid" =>$item['id'],
+                        "orderNo" =>$orderNo,
+                        "money" =>$item['min'],
+                        "money2" =>$money_usd,
+                        "total_interest" =>$total_interest,
+                        "wait_interest" =>$total_interest,
+                        "total_num" =>$total_num,
+                        "wait_num" =>$total_num,
+                        "day" =>$item['day'],
+                        "rate" =>$item['rate'],
+                        "type" =>$item['type'],
+                        "is_draw" => 1,
+                        "source" => 3,
+                        "not_receive" =>$item['not_receive'],
+                        "is_distribution" =>$item['is_distribution'],
+                        "currency" =>$currency,
+                        "time_zone" =>$time_zone,
+                        "time" =>$time,
+                        "time_actual" =>$time_actual,
+                        "time2" =>$time2,
+                        "time2_actual" =>$time2_actual,
+                    );
+                    Db::name('LcInvest')->insertGetId($insert1);
+                    Db::name('LcInvest')->insertGetId($insert2);
+                }else{
+                    //添加投资记录
+                    $insert = array(
+                        "uid" =>$uid,
+                        "itemid" =>$item['id'],
+                        "orderNo" =>$orderNo,
+                        "money" =>$item['min'],
+                        "money2" =>$money_usd,
+                        "total_interest" =>$total_interest,
+                        "wait_interest" =>$total_interest,
+                        "total_num" =>$total_num,
+                        "wait_num" =>$total_num,
+                        "day" =>$item['day'],
+                        "rate" =>$item['rate'],
+                        "type" =>$item['type'],
+                        "is_draw" => 1,
+                        "source" => 3,
+                        "not_receive" =>$item['not_receive'],
+                        "is_distribution" =>$item['is_distribution'],
+                        "currency" =>$currency,
+                        "time_zone" =>$time_zone,
+                        "time" =>$time,
+                        "time_actual" =>$time_actual,
+                        "time2" =>$time2,
+                        "time2_actual" =>$time2_actual,
+                    );
+
+                    Db::name('LcInvest')->insertGetId($insert);
+                }
+
+            }
 
             Db::commit();
             $this->success("success");

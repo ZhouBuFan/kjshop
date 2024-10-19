@@ -459,6 +459,8 @@ class Index extends Controller
     public function vip_update()
     {
         // set_time_limit(24*3600);
+        $page=$this->request->param('page',1);
+        $limit=1000;
         $time_zone = getTimezoneByLanguage('en_us');
         $datetime = date('Y-m-d');
         //当前用户时区时间
@@ -468,7 +470,7 @@ class Index extends Controller
             if ($item['value'] == 8) {
                 break;
             }
-            $user_level = Db::name('LcUser')->where("mid = {$item['id']}")->whereTime('logintime', '>=', $act_date_time)->select();
+            $user_level = Db::name('LcUser')->where("mid = {$item['id']}")->whereTime('logintime', '>=', $act_date_time)->page($page, $limit)->select();
             foreach ($user_level as $val) {
                 switch ($item['value']) {
                     case 1:

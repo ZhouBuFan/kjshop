@@ -43,15 +43,26 @@ class Index extends Controller
     {
         $params = $this->request->param();
         $language = $params["language"];
-        $info = Db::name('LcInfo')->find(1);
-        
+        $info='';
+        if(Cache::store('redis')->get('info')){
+            $info =Cache::store('redis')->get("info",$info);
+        }else{
+            $info = Db::name('LcInfo')->find(1);
+            Cache::store('redis')->set("info",$info);
+        }
         if(empty($params["reload"])){
             if($info['auto_lang']){
                 $language = getLanguageByIp($this->request->ip());
             }
         }
-        $currency = Db::name('LcCurrency')->where(['country' => $language])->find();
-        
+        $currency='';
+        if(Cache::store('redis')->get('web_ccrrency')){
+            $currency =Cache::store('redis')->get("web_ccrrency",$currency);
+        }else{
+            $currency = Db::name('LcCurrency')->where(['country' => $language])->find();
+            Cache::store('redis')->set("web_ccrrency",$currency,3600);
+        }
+
         $data = array(
             "webname" => $info['webname'],
             "currency" => $currency['symbol'],
@@ -81,8 +92,6 @@ class Index extends Controller
             $info = Db::name('LcInfo')->find(1);
             Cache::store('redis')->set("info",$info);
         }
-        
-        
         $data = array(
             "logo" => $info['logo_img'],
             "invite_code" => $info['invite_code'],

@@ -130,6 +130,8 @@ class Item extends Controller
             $this->class = Db::name("LcItemClass")->order('id asc')->select();
             $this->class = Data::arr2table($this->class);
             $this->viplists = Db::name("LcUserMember")->select();
+            $this->items = Db::name('LcItem')->select();
+            if(!isset($vo['item_id'])) $vo['item_id'] = '';
             $vo['not_receive'] = empty($vo['not_receive']) ? [] : json_decode($vo['not_receive']);
         }
         if ($this->request->isPost()) {
